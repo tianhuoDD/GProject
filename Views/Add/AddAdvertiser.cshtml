@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/backstage.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+</head>
+<body style="background-color: #EFEFEF !important" class="hidden">
+    <div id="header">
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <div id="title">
+            <ul>
+                <li><a href="/BackStage/UserMan" style="border-bottom: 3px solid rgb(255, 255, 0)">后台管理</a></li>
+
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            欢迎，
+            <a id="user-id"></a>
+        </p>
+        <!--登出按钮-->
+        <div id="logout">
+            <a href="/LoginReg/Login">退出登录</a>
+        </div>
+    </div>
+    <main class="main-container">
+        <!-- 左侧栏 -->
+        <div class="main-left">
+            <ul>
+                <li><a href="/BackStage/VideoMan" class="sidebar-link">视频管理</a></li>
+                <li><a href="/BackStage/UserMan" class="sidebar-link">用户管理</a></li>
+                <li><a href="/BackStage/CommentMan" class="sidebar-link">评论管理</a></li>
+                <li><a href="/BackStage/AdvertiserMan" class="sidebar-link" style="background-color: rgb(178, 178, 179);">广告管理</a></li>
+                <li><a href="/BackStage/OrderMan" class="sidebar-link">账单管理</a></li>
+                <li><a href="/FrontStage/Index" class="sidebar-link">返回首页</a></li>
+            </ul>
+        </div>
+        <!-- 右侧栏 -->
+        <div class="main-right">
+            <!-- 搜索栏 -->
+            <div class="backsearch">
+                <form action="/Search/SearchAdvertiser" method="get">
+                    <div class="backsearch-bar">
+                        <!--使用value来存储搜索成功的值-->
+                        <input type="text" name="searchTerm" placeholder="广告商名称丨关键字" value="@ViewBag.SearchTerm">
+                        <button type="submit">查询</button>
+                        <button type="button" id="addButtonAdvertiser">添加</button>
+                    </div>
+                </form>
+            </div>
+            <!--添加用户-->
+            <div class="list">
+                <form method="post" id="addAddvertiser" onsubmit="return checkFormAddAdvertiser()" action="/Add/AddAdvertiser" enctype="multipart/form-data">
+                    <table class="table form-group">
+                        <tr>
+                            <th>选择</th>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>广告商名称</th>
+                            <th>余额</th>
+                            <th>广告内容</th>
+                            <th>开始时间</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <!-- type="submit"提交信息 -->
+                                <button type="submit" class="btn save-btn">添加</button>
+                                <button type="button" class="btn cancel-btn" onclick="return clearFormAddAdvertiser()">清空</button>
+                            </td>
+                            <td><label for="id"><input type="text" id="id" name="id" placeholder="请输入ID"></label></td>
+                            <td><label for="username"><input type="text" id="username" name="username" placeholder="请输入用户名"></label></td>
+                            <td><label for="inAdName"><input type="text" id="inAdName" name="inAdName" placeholder="请输入广告商名称"></label></td>
+                            <td>
+                                <label for="balance">
+                                    <input type="number" id="balance" name="balance" placeholder="请输入余额" step="0.01" pattern="\d+(\.\d{1,2})?" title="最多允许两位小数">
+                                </label>
+                            </td>
+                            <td><label for="inAdContent"><textarea id="inAdContent" name="inAdContent" placeholder="请输入广告内容"></textarea></label></td>
+                            <td><label for="startDate"><input type="datetime-local" id="startDate" name="startDate"></label></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>结束时间</th>
+                            <th>广告状态</th>
+                            <th>广告花费</th>
+                            <th>是否支付</th>
+                            <th>其他</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <!-- GetValueOrDefault().ToString()当regtime为null时，使用最小时间-->
+                            <td><label for="endDate"><input type="datetime-local" id="endDate" name="endDate"></label></td>
+                            <td>
+                                <label for="adStatus0" class="ifAdmin">
+                                    <input type="radio" id="adStatus0" name="adStatus" value="0" > 未审核
+                                </label>
+                                <label for="adStatus1" class="ifAdmin">
+                                    <input type="radio" id="adStatus1" name="adStatus" value="1"> 已审核
+                                </label>
+                                <div style="flex-basis: 100%;"></div> <!-- 添加一个空白的div，强制换行 -->
+                                <label for="adStatus2" class="ifAdmin">
+                                    <input type="radio" id="adStatus2" name="adStatus" value="2"> 播放中
+                                </label>
+                                <label for="adStatus3" class="ifAdmin">
+                                    <input type="radio" id="adStatus3" name="adStatus" value="3" > 已结束
+                                </label>
+                            </td>
+                            <td>
+                                <label for="cost">
+                                    <input type="number" id="cost" name="cost" placeholder="请输入广告费用" step="0.01" pattern="\d+(\.\d{1,2})?" title="最多允许两位小数">
+                                </label>
+                            </td>
+
+                            <td>
+                                <label for="payStatus0" class="ifAdmin">
+                                    <input type="radio" id="payStatus0" name="payStatus" value="0"> 未支付
+                                </label>
+                                <label for="payStatus1" class="ifAdmin">
+                                    <input type="radio" id="payStatus1" name="payStatus" value="1"> 已支付
+                                </label>
+                            </td>
+                            <td><a href="javascript:history.back()">返回</a></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!--JS脚本-->
+    <script>
+        //在 Razor 视图中传递 TempData 的值给 backstage.js
+        var TempDataNotice = '@TempData["notice"]';
+        var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <!--js脚本引用-->
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <!--包含‘TempData提示’、‘ViewBag提示’、‘清空表单’、‘检查空信息’、‘用户名记录’、‘登出按钮’、‘删除用户’-->
+    <script src="~/Content/js/backstage.js"></script>
+    <script src="~/Content/js/advertiserman.js"></script>
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

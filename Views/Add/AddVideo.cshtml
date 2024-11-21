@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/backstage.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+</head>
+<body style="background-color: #EFEFEF !important" class="hidden">
+    <div id="header">
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <div id="title">
+            <ul>
+                <li><a href="/BackStage/UserMan" style="border-bottom: 3px solid rgb(255, 255, 0)">后台管理</a></li>
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            欢迎，
+            <a id="user-id"></a>
+        </p>
+        <!--登出按钮-->
+        <div id="logout">
+            <a href="/LoginReg/Login">退出登录</a>
+        </div>
+    </div>
+    <main class="main-container">
+        <!-- 左侧栏 -->
+        <div class="main-left">
+            <ul>
+                <li><a href="/BackStage/VideoMan" class="sidebar-link" style="background-color: rgb(178, 178, 179);">视频管理</a></li>
+                <li><a href="/BackStage/UserMan" class="sidebar-link">用户管理</a></li>
+                <li><a href="/BackStage/CommentMan" class="sidebar-link">评论管理</a></li>
+                <li><a href="/BackStage/AdvertiserMan" class="sidebar-link">广告管理</a></li>
+                <li><a href="/BackStage/OrderMan" class="sidebar-link">账单管理</a></li>
+                <li><a href="/FrontStage/Index" class="sidebar-link">返回首页</a></li>
+            </ul>
+        </div>
+        <!-- 右侧栏 -->
+        <div class="main-right">
+            <!-- 搜索栏 -->
+            <div class="backsearch ">
+                <form action="/Search/SearchVideo" method="get">
+                    <div class="backsearch-bar">
+                        <input type="text" name="searchTerm" placeholder="视频名称、唯一标识丨关键字" value="@ViewBag.SearchTerm" >
+                        <button type="submit">查询</button>
+                        <button type="button" id="addButtonVideo">添加</button>
+                    </div>
+                </form>
+            </div>
+            <!--添加视频-->
+            <div class="list">
+                <form method="post" id="addVideo" onsubmit="return checkFormAddVideo()" action="/Add/AddVideo">
+                    <table class="table form-group">
+                        <!--tr为行-->
+                        <tr>
+                            <!--使用th定义表头-->
+                            <th>选择</th>
+                            <th>视频ID</th>
+                            <th>视频标题</th>
+                            <th>视频链接</th>
+                            <th>视频封面</th>
+                            <th>视频标签</th>
+                            <th>视频年份</th>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="submit" class="btn save-btn">添加</button>
+                                <button type="button" class="btn cancel-btn" onclick="return clearFormAddVideo()">清空</button>
+                            </td>
+                            <td><label for="videoID"><input type="text" id="videoID" name="videoID" placeholder="请输入视频ID"></label></td>
+                            <td><label for="inTitle"><input type="text" id="inTitle" name="inTitle" placeholder="请输入视频名称"></label></td>
+                            <td><label for="inLink"><input type="text" id="inLink" name="inLink" placeholder="请输入视频链接"></label></td>
+                            <td><label for="inCover"><input type="text" id="inCover" name="inCover" placeholder="请输入封面链接"></label></td>
+                            <td><label for="inTag"><input type="text" id="inTag" name="inTag" placeholder="请输入视频标签"></label></td>
+                            <td><label for="inYear"><input type="text" id="inYear" name="inYear" placeholder="请输入视频年份"></label></td>
+
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>视频评分</th>
+                            <th>视频状态</th>
+                            <th>视频热度</th>
+                            <th>视频类型</th>
+                            <th>唯一标识</th>
+                            <th>视频介绍</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><label for="inRating"><input type="text" id="inRating" name="inRating" placeholder="请输入视频评分"></label></td>
+                            <td><label for="inStatus"><input type="text" id="inStatus" name="inStatus" placeholder="请输入视频状态"></label></td>
+                            <td><label for="inHotScore"><input type="text" id="inHotScore" name="inHotScore" placeholder="请输入视频热度"></label></td>
+                            <td><label for="inType"><input type="text" id="inType" name="inType" placeholder="请输入视频类型"></label></td>
+                            <td><label for="intvID"><input type="text" id="intvID" name="intvID" placeholder="请输入唯一标识"></label></td>
+                            <td><label for="inDesc"><textarea id="inDesc" name="inDesc" placeholder="请输入视频介绍"></textarea></label></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+
+                            <th>轮播封面</th>
+                            <th>上映时间</th>
+                            <th>视频时长(s)</th>
+                            <th>导演</th>
+                            <th>演员</th>
+                            <th>其他</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+
+                            <td><label for="inBigCover"><input type="text" id="inBigCover" name="inBigCover" placeholder="请输入轮播封面"></label></td>
+                            <td><label for="inDate"><input type="text" id="inDate" name="inDate" placeholder="请输入上映时间"></label></td>
+                            <td><label for="inTime"><input type="text" id="inTime" name="inTime" placeholder="请输入视频时长(s)"></label></td>
+                            <td><label for="inDirector"><input type="text" id="inDirector" name="inDirector" placeholder="请输入导演"></label></td>
+                            <td><label for="inActor"><input type="text" id="inActor" name="inActor" placeholder="请输入演员"></label></td>
+                            <td><a href="/BackStage/VideoMan">返回</a></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!--JS脚本-->
+    <script>
+        //在 Razor 视图中传递 TempData 的值给 backstage.js
+        var TempDataNotice = '@TempData["notice"]';
+        var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <!--js脚本引用-->
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <!--包含‘TempData提示’、‘ViewBag提示’、‘清空表单’、‘检查空信息’、‘用户名记录’、‘登出按钮’、‘删除用户’-->
+    <script src="~/Content/js/backstage.js"></script>
+    <script src="~/Content/js/videoman.js"></script>
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

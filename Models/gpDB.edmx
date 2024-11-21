@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="gpdbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="8.0" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="advertisertb">
+          <Key>
+            <PropertyRef Name="advertiserID" />
+          </Key>
+          <Property Name="advertiserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ad_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ad_content" Type="text" />
+          <Property Name="start_date" Type="datetime" Precision="0" />
+          <Property Name="end_date" Type="datetime" Precision="0" />
+          <Property Name="status" Type="tinyint" />
+          <Property Name="cost" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="payment_status" Type="tinyint" />
+          <Property Name="balance" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="comtb">
+          <Key>
+            <PropertyRef Name="comID" />
+          </Key>
+          <Property Name="comID" Type="int" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="content" Type="text" Nullable="false" />
+          <Property Name="comtime" Type="datetime" Precision="0" />
+          <Property Name="tvid" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="status" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="transaction_recordtb">
+          <Key>
+            <PropertyRef Name="transactionID" />
+          </Key>
+          <Property Name="transactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="255" />
+          <Property Name="ad_name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="transaction_type" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="amount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="transaction_date" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="alipay_trade_no" Type="varchar" MaxLength="64" />
+          <Property Name="trade_status" Type="varchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="usertb">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="nickname" Type="varchar" MaxLength="255" />
+          <Property Name="regtime" Type="datetime" Precision="0" />
+          <Property Name="icon" Type="mediumblob" />
+          <Property Name="admin" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="videotb">
+          <Key>
+            <PropertyRef Name="videoID" />
+          </Key>
+          <Property Name="videoID" Type="int" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="link" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="cover" Type="varchar" MaxLength="255" />
+          <Property Name="tag" Type="varchar" MaxLength="255" />
+          <Property Name="year" Type="varchar" MaxLength="255" />
+          <Property Name="rating" Type="float" />
+          <Property Name="status" Type="varchar" MaxLength="255" />
+          <Property Name="hotscore" Type="int" />
+          <Property Name="type" Type="varchar" MaxLength="255" />
+          <Property Name="tvid" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="desc" Type="text" />
+          <Property Name="date" Type="varchar" MaxLength="255" />
+          <Property Name="time" Type="int" />
+          <Property Name="bigcover" Type="varchar" MaxLength="255" />
+          <Property Name="director" Type="varchar" MaxLength="255" />
+          <Property Name="actor" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityContainer Name="gpdbModelStoreContainer">
+          <EntitySet Name="advertisertb" EntityType="Self.advertisertb" Schema="gpdb" store:Type="Tables" />
+          <EntitySet Name="comtb" EntityType="Self.comtb" Schema="gpdb" store:Type="Tables" />
+          <EntitySet Name="transaction_recordtb" EntityType="Self.transaction_recordtb" Schema="gpdb" store:Type="Tables" />
+          <EntitySet Name="usertb" EntityType="Self.usertb" Schema="gpdb" store:Type="Tables" />
+          <EntitySet Name="videotb" EntityType="Self.videotb" Schema="gpdb" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="gpdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="gpdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="videotb" EntityType="gpdbModel.videotb" />
+          <EntitySet Name="comtb" EntityType="gpdbModel.comtb" />
+          <EntitySet Name="usertb" EntityType="gpdbModel.usertb" />
+          <EntitySet Name="advertisertb" EntityType="gpdbModel.advertisertb" />
+          <EntitySet Name="transaction_recordtb" EntityType="gpdbModel.transaction_recordtb" />
+        </EntityContainer>
+        <EntityType Name="videotb">
+          <Key>
+            <PropertyRef Name="videoID" />
+          </Key>
+          <Property Name="videoID" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="link" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="cover" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="tag" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="year" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="rating" Type="Single" />
+          <Property Name="status" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="hotscore" Type="Int32" />
+          <Property Name="type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="tvid" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="desc" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="date" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="time" Type="Int32" />
+          <Property Name="bigcover" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="director" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="actor" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="comtb">
+          <Key>
+            <PropertyRef Name="comID" />
+          </Key>
+          <Property Name="comID" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="content" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="comtime" Type="DateTime" />
+          <Property Name="tvid" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="SByte" />
+        </EntityType>
+        <EntityType Name="usertb">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="nickname" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="regtime" Type="DateTime" />
+          <Property Name="icon" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="admin" Type="SByte" />
+        </EntityType>
+        <EntityType Name="advertisertb">
+          <Key>
+            <PropertyRef Name="advertiserID" />
+          </Key>
+          <Property Name="advertiserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ad_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ad_content" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="start_date" Type="DateTime" />
+          <Property Name="end_date" Type="DateTime" />
+          <Property Name="status" Type="SByte" />
+          <Property Name="cost" Type="Decimal" />
+          <Property Name="payment_status" Type="SByte" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="balance" Type="Decimal" />
+        </EntityType>
+        <EntityType Name="transaction_recordtb">
+          <Key>
+            <PropertyRef Name="transactionID" />
+          </Key>
+          <Property Name="transactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ad_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="transaction_type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="amount" Type="Decimal" Nullable="false" />
+          <Property Name="transaction_date" Type="DateTime" Nullable="false" />
+          <Property Name="alipay_trade_no" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="trade_status" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="gpdbModelStoreContainer" CdmEntityContainer="gpdbEntities">
+          <EntitySetMapping Name="videotb">
+            <EntityTypeMapping TypeName="gpdbModel.videotb">
+              <MappingFragment StoreEntitySet="videotb">
+                <ScalarProperty Name="actor" ColumnName="actor" />
+                <ScalarProperty Name="director" ColumnName="director" />
+                <ScalarProperty Name="bigcover" ColumnName="bigcover" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="desc" ColumnName="desc" />
+                <ScalarProperty Name="tvid" ColumnName="tvid" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="hotscore" ColumnName="hotscore" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="tag" ColumnName="tag" />
+                <ScalarProperty Name="cover" ColumnName="cover" />
+                <ScalarProperty Name="link" ColumnName="link" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="videoID" ColumnName="videoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comtb">
+            <EntityTypeMapping TypeName="gpdbModel.comtb">
+              <MappingFragment StoreEntitySet="comtb">
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="tvid" ColumnName="tvid" />
+                <ScalarProperty Name="comtime" ColumnName="comtime" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="comID" ColumnName="comID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usertb">
+            <EntityTypeMapping TypeName="gpdbModel.usertb">
+              <MappingFragment StoreEntitySet="usertb">
+                <ScalarProperty Name="admin" ColumnName="admin" />
+                <ScalarProperty Name="icon" ColumnName="icon" />
+                <ScalarProperty Name="regtime" ColumnName="regtime" />
+                <ScalarProperty Name="nickname" ColumnName="nickname" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="advertisertb">
+            <EntityTypeMapping TypeName="gpdbModel.advertisertb">
+              <MappingFragment StoreEntitySet="advertisertb">
+                <ScalarProperty Name="balance" ColumnName="balance" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="payment_status" ColumnName="payment_status" />
+                <ScalarProperty Name="cost" ColumnName="cost" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="ad_content" ColumnName="ad_content" />
+                <ScalarProperty Name="ad_name" ColumnName="ad_name" />
+                <ScalarProperty Name="advertiserID" ColumnName="advertiserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="transaction_recordtb">
+            <EntityTypeMapping TypeName="gpdbModel.transaction_recordtb">
+              <MappingFragment StoreEntitySet="transaction_recordtb">
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="trade_status" ColumnName="trade_status" />
+                <ScalarProperty Name="alipay_trade_no" ColumnName="alipay_trade_no" />
+                <ScalarProperty Name="transaction_date" ColumnName="transaction_date" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="transaction_type" ColumnName="transaction_type" />
+                <ScalarProperty Name="ad_name" ColumnName="ad_name" />
+                <ScalarProperty Name="transactionID" ColumnName="transactionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

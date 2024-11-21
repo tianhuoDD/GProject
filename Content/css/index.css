@@ -1,0 +1,131 @@
+
+/* 单独设置相对定位(不能使用.carousel的定位，会因为溢出内容导致隐藏) 
+    将高度设为0，防止占位*/
+.rec-search{
+    width: 920px;
+    height: 0;
+    margin: 70px auto; /* 上边距为70px，左右居中 */
+    position: relative;
+}
+    .rec-search a {
+        position: absolute;
+        top: -30px; /* 距离顶部的距离 */
+        right: 0px; /* 距离右侧的距离 */
+        color: white;
+    }
+
+        .rec-search a:hover {
+            color: yellow;
+        }
+.aTitle{
+    color: white;
+    position: absolute; /* 添加绝对定位 */
+    top: -30px; /* 负上边距将标题移到上方 */
+    left: 0px;
+}
+.search-bar {
+    position: absolute;
+    top: -30px; /* 距离顶部的距离 */
+    right: 0px; /* 距离右侧的距离 */
+}
+.search-bar input[type="text"] {
+    width: 212.3px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;/* 隐藏文本框周围的轮廓 */
+    font-size: 16px;
+    color: #333; /* 文本颜色 */
+}
+.search-bar input[type="text"]::placeholder {
+    color: #888; /* 占位符文本颜色 */
+}
+/* 轮播区域 */
+.carousel {
+    z-index: 100;
+    width: 100%;
+    max-width: 920px; /* 轮播容器最大宽度 */
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+}
+
+.slides {
+    flex: 100%;
+    display: flex;
+    transition: transform 0.3s ease-in-out; /* 添加过渡效果，使平滑移动生效 */
+    transform: translateX(0); /* 初始时不进行水平移动 */
+}
+
+/* 每项轮播内容 */
+.slide {
+    flex:0 0 100%;
+    position: relative;
+    min-width: 100%;
+    box-sizing: border-box;
+    width: 100%;
+    height: 460px;
+    display: block;
+    border-radius: 10px;
+}
+    /* 遮罩层样式 */
+    .slide::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(1,1,1,.2); /* 灰色遮罩，可以根据需要调整透明度 */
+    }
+/* 切换下一个图片 */
+.leftIcon {
+    position: absolute;
+    width: 25px;
+    right: 240px;
+    top: 150px;
+    cursor: pointer; /*手型指针*/
+}
+.rightIcon {
+    position: absolute;
+    width: 25px;
+    right: 95px;
+    top: 150px;
+    cursor: pointer; /*手型指针*/
+}
+/* 轮播图信息 */
+.info{
+    position: relative;
+    left: 690px;
+    top: 80px;
+}
+.slide-cover{
+    width: 100px;
+    height: auto;
+}
+.slide-title{
+    position: absolute;
+    top: 135px;
+    color: white;
+    font-weight:500;
+    font-size: 19px;
+}
+.rat-stat {
+    position: absolute;
+    top: 160px;
+    color: white;
+    font-size: 13px;
+}
+.slide-desc {
+    position: absolute;
+    color: #e1e3e5;
+    font-size: 14px;
+    top: 180px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    max-width: 180px;
+}

@@ -1,0 +1,186 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <!--链接css文件-->
+    <link rel="stylesheet" href="~/Content/css/backstage.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+    <link rel="stylesheet" href="~/Content/css/PagedList.css">
+</head>
+<body style="background-color: #EFEFEF !important" class="hidden">
+    <!--导航栏-->
+    <div id="header">
+        <!--Logo-->
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <!--该页标题-->
+        <div id="title">
+            <ul>
+                <li><a href="/BackStage/UserMan" style="border-bottom: 3px solid rgb(255, 255, 0)">后台管理</a></li>
+            </ul>
+        </div>
+        <!--用户名展示（直接链接到“个人中心”）-->
+        <p id="user-show">
+            欢迎，
+            <a id="user-id"></a>
+        </p>
+        <!--登出按钮-->
+        <div id="logout">
+            <a href="/LoginReg/Login">退出登录</a>
+        </div>
+    </div>
+    <!--主要内容-->
+    <main class="main-container">
+        <!-- 左侧导航栏 -->
+        <div class="main-left">
+            <ul>
+                <li><a href="/BackStage/VideoMan" class="sidebar-link">视频管理</a></li>
+                <li><a href="/BackStage/UserMan" class="sidebar-link">用户管理</a></li>
+                <li><a href="/BackStage/CommentMan" class="sidebar-link">评论管理</a></li>
+                <li><a href="/BackStage/AdvertiserMan" class="sidebar-link">广告管理</a></li>
+                <li><a href="/BackStage/OrderMan" class="sidebar-link" style="background-color: rgb(178, 178, 179);">账单管理</a></li>
+                <li><a href="/FrontStage/Index" class="sidebar-link">返回首页</a></li>
+            </ul>
+        </div>
+        <!-- 右侧信息栏 -->
+        <div class="main-right">
+            <!-- 搜索栏 -->
+            <div class="backsearch" style="max-width: 1000px">
+                <form action="/Search/SearchOrder" method="get">
+                    <div class="backsearch-bar">
+                        <!--使用value来存储搜索成功的值-->
+                        <input type="text" name="searchTerm" placeholder="广告商名称丨关键字" value="@ViewBag.SearchTerm">
+                        <!-- 时间筛选下拉框 -->
+                        <!-- 开始日期选择器 -->
+                        <label for="startDatePicker" style="margin-left:10px">开始日期：</label>
+                        <input type="date" id="startDatePicker" name="startDateFilter" value="@ViewBag.StartDate">
+                        <!-- 结束日期选择器 -->
+                        <label for="endDatePicker" style="margin-left:10px">结束日期：</label>
+                        <input type="date" id="endDatePicker" name="endDateFilter" value="@ViewBag.EndDate">
+
+                        <!-- 其他筛选条件 -->
+                        <!-- 交易类型筛选 -->
+                        <select name="transactionType" style="margin-left:10px">
+                            <option value="">选择交易类型</option>
+                            <option value="充值">充值</option>
+                            <option value="广告">广告</option>
+                            <!-- 添加更多交易类型选项 -->
+                        </select>
+                        <!-- 交易状态筛选 -->
+                        <select name="tradeStatus" style="margin-left:10px">
+                            <option value="">选择交易状态</option>
+                            <option value="TRADE_SUCCESS">已支付</option>
+                            <option value="TRADE_CREATE">已创建未支付</option>
+                            <!-- 添加更多交易状态选项 -->
+                        </select>
+                        <button type="submit">查询</button>
+                    </div>
+                </form>
+            </div>
+
+            <!--用户信息-->
+            <div class="list">
+                <!--用表展示信息-->
+                <table class="table">
+                    <!--tr为行-->
+                    <tr>
+                        <!--使用th定义表头-->
+                        <th>选择</th>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>广告商名称</th>
+                        <th>交易类型</th>
+                        <th>交易金额</th>
+                        <th>交易时间</th>
+                        <th>交易号</th>
+                        <th>交易状态</th>
+                    </tr>
+                    <!--使用循环遍历advertiserTB-->
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="/BackStage/DeleteOrder/@order.transactionID" onclick="return confirmDeleteOrder(@order.transactionID)">删除</a>
+                            </td>
+                            <td>@order.transactionID</td>
+                            <td>@order.username</td>
+                            <td>@order.ad_name</td>
+                            <td>@order.transaction_type</td>
+                            <td>@order.amount</td>
+                            <td>@order.transaction_date</td>
+                            <td>@order.alipay_trade_no</td>
+                            <td>
+                                @{
+                                    var tradeStatusDisplay = "";
+                                    switch (order.trade_status)
+                                    {
+                                        case "TRADE_SUCCESS":
+                                            tradeStatusDisplay = "已支付";
+                                            break;
+                                        case "TRADE_CREATE":
+                                            tradeStatusDisplay = "已创建未支付";
+                                            break;
+                                        default:
+                                            tradeStatusDisplay = "状态未知";
+                                            break;
+                                    }
+                                }
+                                @tradeStatusDisplay
+                            </td>
+                        </tr>
+                    }
+                    <tr style="background-color: transparent">
+                        <td colspan="5">合计</td>
+                        <td colspan="4">@ViewBag.TotalAmount 元</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </main>
+    <div>
+        <!-- 分页控件 -->
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("OrderMan", new { page }))
+    </div>
+    <!--JS脚本-->
+    <script>
+        document.getElementById('form').onsubmit = function () {
+            var startDate = document.getElementById('startDatePicker').value;
+            var endDate = document.getElementById('endDatePicker').value;
+
+            // 将日期字符串转换为日期对象
+            var start = new Date(startDate);
+            var end = new Date(endDate);
+
+            // 检查日期
+            if (start > end) {
+                alert('结束日期必须大于或等于开始日期。');
+                return false; // 阻止表单提交
+            }
+            return true; // 允许表单提交
+        };
+        //在 Razor 视图中传递 TempData 的值给 backstage.js
+        var TempDataNotice = '@TempData["notice"]';
+        var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <!--jquery引用-->
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <!--包含‘TempData提示’、‘ViewBag提示’、‘清空表单’、‘检查空信息’、‘用户名记录’、‘登出按钮’、‘删除用户’-->
+    <script src="~/Content/js/backstage.js"></script>
+    <script src="~/Content/js/orderman.js"></script>
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

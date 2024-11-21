@@ -1,0 +1,175 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/video.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+    <link rel="stylesheet" href="~/Content/css/search.css">
+    <!-- 搜索结果页特定样式 -->
+    <link rel="stylesheet" href="~/Content/css/search.css">
+</head>
+<body style="background-color: black !important;">
+    <div id="header">
+        <!--Logo-->
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <!--导航栏-->
+        <div id="title">
+            <ul>
+                <li><a href="/FrontStage/Index">首页</a></li>
+                <li><a href="/FrontStage/Movies">电影</a></li>
+                <li><a href="/FrontStage/Episodes">电视剧</a></li>
+                <li><a href="/FrontStage/Variety">综艺</a></li>
+                <li><a href="/FrontStage/Anime">动漫</a></li>
+                <li><a href="/FrontStage/Documentary">纪录片</a></li>
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            <a id="user-id"></a>
+            <div id="dropdown" style="display: none;">
+                <a onclick="openProfile()">个人中心</a>
+                <a onclick="openAdmin()">后台管理</a>
+            </div>
+        </p>
+        <!--登录、注销按钮显示-->
+        <div id="login">
+            <!-- 如果已登录，则显示用户名和注销按钮 -->
+            <a href="/LoginReg/Login" id="logout">注销</a>
+            <!-- 如果未登录，则显示登录按钮 -->
+            <a href="/LoginReg/Login" id="login-btn">登录</a>
+        </div>
+    </div>
+    <!-- 主体内容 -->
+    <main class="container">
+        <!-- 搜索框 -->
+        <form action="/FrontStage/Search" method="get">
+            <div class="search-box">
+                <input type="text" id="search-query" name="query" placeholder="搜索电影" value="@ViewBag.SearchTerm">
+                <button type="submit">搜索</button>
+            </div>
+        </form>
+        <!-- 搜索结果 -->
+        <section id="search-results">
+            @if (!ViewBag.result)
+            {
+                <div id="no-results">
+                    <p>没有找到相关结果。</p>
+                </div>
+            }
+            else
+            {
+                <!-- 搜索结果项 -->
+                <ul class="video">
+                    @foreach (var video in Model)
+                    {
+                        <li>
+                            <div class="video-item">
+                                <a href="/VideoDetails/Details?tvid=@video.tvid" title="@video.title">
+                                    <div class="video-thumb">
+                                        <!--盗链 Prompt4-->
+                                        <img class="video-thumb" src="@video.cover" referrerPolicy="no-referrer">
+                                        <!--评分为0时不显示-->
+                                        @if (video.rating != 0)
+                                        {
+                                            <!--确保显示一位小数-->
+                                            <span class="pic-tag-top">@String.Format("{0:F1}", video.rating)</span>
+                                        }
+                                        <span class="pic-text-right">@video.status</span>
+                                    </div>
+                                </a>
+                                <div class="video-title">
+                                    <a href="/VideoDetails/Details?tvid=@video.tvid" title="@video.title">@video.title</a>
+                                </div>
+                            </div>
+                            <!-- 大封面图片 -->
+                            <div class="video-mask hidden">
+                                <div class="img-warp">
+                                    <img src="@video.bigcover" referrerPolicy="no-referrer">
+                                    <!--评分为0时不显示-->
+                                    @if (video.rating != 0)
+                                    {
+                                        <!--确保显示一位小数-->
+                                        <span class="pic-tag-top2">@String.Format("{0:F1}", video.rating)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="pic-text-right2">@video.status</span>
+                                    }
+                                </div>
+                                <div class="content">
+                                    <span title="@video.title" class="content-title">@video.title</span>
+                                    <!--前端处理标签分割，比较消耗性能-->
+                                    <div class="tags">
+                                        @{
+                                            string[] tags = video.tag.Split(';');
+                                            int tagCount = 0;
+                                            foreach (var tag in tags)
+                                            {
+                                                if (tagCount >= 4)
+                                                {
+                                                    break;
+                                                }
+
+                                                <span title="@video.tag" class="tag">@tag</span>
+
+                                                tagCount++;
+                                            }
+                                        }
+                                    </div>
+                                    <span title="@video.actor" class="actor">@video.actor</span>
+                                    <div class="desc" title="@video.desc">
+                                        @video.desc
+                                    </div>
+                                    <button class="play-btn" onclick="window.location.href='/VideoDetails/Details?tvid=@video.tvid'">
+                                        <img class="play-icon" src="~/Content/img/play.svg">
+                                        立即播放
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            }
+
+        </section>
+        <section>
+            <div>
+                <!-- 分页控件 -->
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Search", new { page, query = ViewBag.SearchTerm }))
+            </div>
+        </section>
+    </main>
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+    <!-- 脚本 -->
+    <script>
+        // 获取用户id和下拉框的位置
+        var userId = document.getElementById('user-id');
+        var dropdown = document.getElementById('dropdown');
+        var TempDataNotice = '@TempData["notice"]';
+        var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <script src="~/Content/js/frontstage.js"></script>
+
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

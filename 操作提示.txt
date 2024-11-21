@@ -1,0 +1,48 @@
+﻿MySql账号密码：root - 123456
+支付宝沙箱买家账户：tvulcd9177@sandbox.com - 111111
+1、改变默认启动页面（路由配置）：~/APP Start/RouteConfig.cs
+2、Prompt1：为防止提交空数据，给服务器带来压力，
+			则在前端将提交阻止。[action表示表单提交到的网址]
+   Prompt2：当路由系统解析一个URL时，它会使用路由模板中定义的参数名来查找对应的值。路由：~/APP Start/RouteConfig.cs
+			例如，对于路由模板 {controller}/{action}/{id} 和URL /BackStage/DeleteVideo/1，
+			路由系统会查找一个名为 id 的参数并将其值设置为 1。然后，
+			它会尝试将这个值传递给动作方法的一个名为 id 
+			的参数。如果动作方法期望一个不同名称的参数（如 videoID），
+			那么匹配会失败，因为路由系统不知道应该将值 1 传递给哪个参数。
+   Prompt3：解析数据后，将其转换为Video类型，表头需与要添加到的表videotb相同，其路径在“~/Models/Video.cs”,需手动创建。
+   Prompt4：由于封面链接被保护，需要使用referrerPolicy="no-referrer"来不提供referrer，访问链接
+   Prompt5：在~/Model/Video.cs中加入VideoHotModel，创建videotb相同但变量不同的DBset，再在Index()中创建var viewModel = new VideoHotModel，
+			返回viewModel，在前端通过Model.Movies、Model.Episodes......来引用不同数据。
+   Prompt6：此处发生过异常。由于python输出的json数据中包含无法被‘gbk’显示的字符，导致无法读取output。下次DeBug时可以使用此
+			来查看错误。（需要注意的是：以后遇到类似问题时，要注意是否可能是字符串编码问题）
+   Prompt7：? 的作用是开始查询字符串(query string),用于传递第一个参数。
+			例如：/BackStage/VideoDetails/1?page=2?search=video这是错误的,因为第二个 ? 表示再次开始一个新的查询字符串,它会覆盖第一个参数 page=2。
+			& 的作用是连接额外的查询参数。如果要传递多个参数,从第二个参数开始,都需要使用 & 连接。
+			例如：/BackStage/VideoDetails/1?page=2&search=video
+   Prompt8：返回上一页有多种方法。1、<a href="javascript:history.back()">返回</a>
+								  2、string referrerUrl = Request.UrlReferrer.ToString();记录页面，后续返回此页面即可。
+   Prompt9：接Prompt2，前端传值目前有两种方式：1、cshtml：/VideoDetails/Details/{id}   controller：Details(string id)
+											   2、cshtml：/VideoDetails/Details?tvid=@tvid    controller：Details(string tvid)
+			区别在于使用'/'路由配置来传值，还是使用'?'拼接来传值。
+3、目前使用技术：html+css+js(Jquery、ajax)+asp.net web(.NET Framework) mvc(C#、Razor)+Python+MySQL
+具体版本：VS2019+MySQL+Python3.11
+		  NuGet库：MySql.Data 8.0.31	
+				   MySql.Data.EntityFramework  8.0.31
+				   // 页数显示
+				   PagedList 1.17.0
+				   PagedList.Mvc 4.5.0
+				   // 支付宝SDK
+				   AlipaySDKNet
+		  MySQL数据库:MySQL Server  8.0.24
+					  MySQL for Visual Studio 1.2.10
+					  Connector/NET  8.0.31
+		
+4、更改JS后，如果不起效果，需要 ctrl+F5 强制刷新页面
+5、遇到此问题时“无法解析依赖项。“EntityFramework 6.4.4”与 'EntityFramework.zh-Hans 6.2.0 约束: EntityFramework (= 6.2.0)' 不兼容。”
+	找到packages.config文件，注释EntityFramework和EntityFramework.zh-Hans
+6、分页实现：安装NuGet包：PagedList.Mvc
+7、GetVideoController获取视频时，会出现间歇性错误:
+									An error occurred: Unexpected character encountered while parsing value: R. Path '', line 0, position 0.
+8、本项目参考：https://www.bilibili.com/video/BV1e64y1k7Q5/
+9、可添加广告位置
+10、本项目编写时间：2023.10.25~2023.11.15

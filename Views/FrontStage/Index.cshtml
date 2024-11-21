@@ -1,0 +1,581 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <link rel="stylesheet" href="~/Content/css/video.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+</head>
+<body style="background-color: black !important;">
+    @{
+        Random rnd = new Random();
+    }
+
+    @foreach (var ad in Model.Advertiser)
+    {
+        if (ad != null)
+        {
+            int top = rnd.Next(50, 500); // 假设顶部位置在50到500像素之间随机
+            int left = rnd.Next(50, 500); // 假设左侧位置在50到500像素之间随机
+            string top2 = top + "px";
+            string left2 = left + "px";
+            <div class="advertiser" style="        
+                z-index: 999;
+                left: @top2;
+                width: 10px;
+                position: absolute;
+                top: @left2;
+                height: 10px;
+                visibility: visible;
+                background-color: rgba(255,255,255,0.3);
+            ">
+                @Html.Raw(ad)
+                <span class="close-ad" style="position: absolute;  top: 0; cursor: pointer; background-color: white">关闭</span>
+            </div>
+        }
+
+    }
+
+
+    <div id="header">
+        <!--Logo-->
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <!--导航栏-->
+        <div id="title">
+            <ul>
+                <li><a href="/FrontStage/Index" style="border-bottom: 3px solid rgb(255, 255, 0)">首页</a></li>
+                <li><a href="/FrontStage/Movies">电影</a></li>
+                <li><a href="/FrontStage/Episodes">电视剧</a></li>
+                <li><a href="/FrontStage/Variety">综艺</a></li>
+                <li><a href="/FrontStage/Anime">动漫</a></li>
+                <li><a href="/FrontStage/Documentary">纪录片</a></li>
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            <a id="user-id"></a>
+            <div id="dropdown" style="display: none;">
+                <a onclick="openProfile()">个人中心</a>
+                <a onclick="openAdmin()">后台管理</a>
+            </div>
+        </p>
+        <!--登录、注销按钮显示-->
+        <div id="login">
+            <!-- 如果已登录，则显示用户名和注销按钮 -->
+            <a href="/LoginReg/Login" id="logout">注销</a>
+            <!-- 如果未登录，则显示登录按钮 -->
+            <a href="/LoginReg/Login" id="login-btn">登录</a>
+        </div>
+    </div>
+    <!--主要内容-->
+    <main class="container">
+
+        <!--图片轮播-->
+        <section>
+            <!--搜索栏-->
+            <div class="rec-search">
+                <strong class="aTitle">正在热映</strong>
+                <form action="/FrontStage/Search" method="get">
+                    <div class="search-bar">
+                        <input type="text" name="query" placeholder="搜索视频">
+                        <button type="submit" style="display: none;"></button>
+                    </div>
+                </form>
+            </div>
+            <!--图片轮播展示-->
+            <div class="carousel" id="carousel">
+
+                <!--图片-->
+                <div class="slides" id="slides">
+                    @foreach (var videos in Model.Videos)
+                    {
+                        <div class="slide" onclick="window.location.href = '/VideoDetails/Details?tvid=@videos.tvid';" style="background: url(@videos.bigcover) center no-repeat; background-size: cover;cursor:pointer;">
+                            <div class="info">
+                                <img class="slide-cover" src="@videos.cover" referrerPolicy="no-referrer">
+                                <div class="slide-title">@videos.title</div>
+                                @if (videos.rating != 0)
+                                {
+                                    <div class="rat-stat">@videos.rating 分</div>
+                                }
+                                else
+                                {
+                                    <div class="rat-stat">@videos.status</div>
+                                }
+                                <div class="slide-desc">@videos.desc</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!--使用JS实现按钮，达到可以控制图片轮播及信息更改-->
+                <img src="~/Content/img/left.svg" class="leftIcon" onclick="prevSlide()" referrerPolicy="no-referrer">
+                <img src="~/Content/img/right.svg" class="rightIcon" onclick="nextSlide()" referrerPolicy="no-referrer">
+            </div>
+        </section>
+        <!--电影推荐-->
+        <section>
+            <div class="rec-search">
+                <strong class="aTitle">电影推荐</strong>
+                <a href="/FrontStage/Movies">查看更多>></a>
+            </div>
+            <ul class="video">
+                @foreach (var movies in Model.Movies)
+                {
+                    <li>
+                        <div class="video-item">
+                            <a href="/VideoDetails/Details?tvid=@movies.tvid" title="@movies.title">
+                                <div class="video-thumb">
+                                    <!--盗链 Prompt4-->
+                                    <img class="video-thumb" src="@movies.cover" referrerPolicy="no-referrer">
+                                    <!--评分为0时不显示-->
+                                    @if (movies.rating != 0)
+                                    {
+                                        <!--确保显示一位小数-->
+                                        <span class="pic-tag-top">@String.Format("{0:F1}", movies.rating)</span>
+                                    }
+                                    <span class="pic-text-right">@movies.status</span>
+                                </div>
+                            </a>
+                            <div class="video-title">
+                                <a href="/VideoDetails/Details?tvid=@movies.tvid" title="@movies.title">@movies.title</a>
+                            </div>
+                        </div>
+                        <!-- 大封面图片 -->
+                        <div class="video-mask hidden">
+                            <div class="img-warp">
+                                <img src="@movies.bigcover" referrerPolicy="no-referrer">
+                                <!--评分为0时不显示-->
+                                @if (movies.rating != 0)
+                                {
+                                    <!--确保显示一位小数-->
+                                    <span class="pic-tag-top2">@String.Format("{0:F1}", movies.rating)</span>
+                                }
+                                else
+                                {
+                                    <span class="pic-text-right2">@movies.status</span>
+                                }
+                            </div>
+                            <div class="content">
+                                <span title="@movies.title" class="content-title">@movies.title</span>
+                                <!--前端处理标签分割，比较消耗性能-->
+                                <div class="tags">
+                                    @{
+                                        string[] tags = movies.tag.Split(';');
+                                        int tagCount = 0;
+                                        foreach (var tag in tags)
+                                        {
+                                            if (tagCount >= 4)
+                                            {
+                                                break;
+                                            }
+
+                                            <span title="@movies.tag" class="tag">@tag</span>
+
+                                            tagCount++;
+                                        }
+                                    }
+                                </div>
+                                <span title="@movies.actor" class="actor">@movies.actor</span>
+                                <div class="desc" title="@movies.desc">
+                                    @movies.desc
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='/VideoDetails/Details?tvid=@movies.tvid'">
+                                    <img class="play-icon" src="~/Content/img/play.svg">
+                                    立即播放
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </section>
+        <!--电视剧推荐-->
+        <section>
+            <div class="rec-search">
+                <strong class="aTitle">电视剧推荐</strong>
+                <a href="/FrontStage/Episodes">查看更多>></a>
+            </div>
+            <ul class="video">
+                @foreach (var episodes in Model.Episodes)
+                {
+                    <li>
+                        <div class="video-item">
+                            <a href="/VideoDetails/Details?tvid=@episodes.tvid" title="@episodes.title">
+                                <div class="video-thumb">
+                                    <!--盗链 Prompt4-->
+                                    <img class="video-thumb" src="@episodes.cover" referrerPolicy="no-referrer">
+                                    <!--评分为0时不显示-->
+                                    @if (episodes.rating != 0)
+                                    {
+                                        <!--确保显示一位小数-->
+                                        <span class="pic-tag-top">@String.Format("{0:F1}", episodes.rating)</span>
+                                    }
+                                    <span class="pic-text-right">@episodes.status</span>
+                                </div>
+                            </a>
+                            <div class="video-title">
+                                <a href="/VideoDetails/Details?tvid=@episodes.tvid" title="@episodes.title">@episodes.title</a>
+                            </div>
+                        </div>
+                        <!-- 大封面图片 -->
+                        <div class="video-mask hidden">
+                            <div class="img-warp">
+                                <img src="@episodes.bigcover" referrerPolicy="no-referrer">
+                                <!--评分为0时不显示-->
+                                @if (episodes.rating != 0)
+                                {
+                                    <!--确保显示一位小数-->
+                                    <span class="pic-tag-top2">@String.Format("{0:F1}", episodes.rating)</span>
+                                }
+                                else
+                                {
+                                    <span class="pic-text-right2">@episodes.status</span>
+                                }
+                            </div>
+                            <div class="content">
+                                <span title="@episodes.title" class="content-title">@episodes.title</span>
+                                <!--前端处理标签分割，比较消耗性能-->
+                                <div class="tags">
+                                    @{
+                                        string[] tags = episodes.tag.Split(';');
+                                        int tagCount = 0;
+                                        foreach (var tag in tags)
+                                        {
+                                            if (tagCount >= 4)
+                                            {
+                                                break;
+                                            }
+
+                                            <span title="@episodes.tag" class="tag">@tag</span>
+
+                                            tagCount++;
+                                        }
+                                    }
+                                </div>
+                                <span title="@episodes.actor" class="actor">@episodes.actor</span>
+                                <div class="desc" title="@episodes.desc">
+                                    @episodes.desc
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='/VideoDetails/Details?tvid=@episodes.tvid'">
+                                    <img class="play-icon" src="~/Content/img/play.svg">
+                                    立即播放
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </section>
+        <!--综艺推荐-->
+        <section>
+            <div class="rec-search">
+                <strong class="aTitle">综艺推荐</strong>
+                <a href="/FrontStage/Variety">查看更多>></a>
+            </div>
+            <ul class="video">
+                @foreach (var variety in Model.Variety)
+                {
+                    <li>
+                        <div class="video-item">
+                            <a href="/VideoDetails/Details?tvid=@variety.tvid" title="@variety.title">
+                                <div class="video-thumb">
+                                    <!--盗链 Prompt4-->
+                                    <img class="video-thumb" src="@variety.cover" referrerPolicy="no-referrer">
+                                    <!--评分为0时不显示-->
+                                    @if (variety.rating != 0)
+                                    {
+                                        <!--确保显示一位小数-->
+                                        <span class="pic-tag-top">@String.Format("{0:F1}", variety.rating)</span>
+                                    }
+                                    <span class="pic-text-right">@variety.status</span>
+                                </div>
+                            </a>
+                            <div class="video-title">
+                                <a href="/VideoDetails/Details?tvid=@variety.tvid" title="@variety.title">@variety.title</a>
+                            </div>
+                        </div>
+                        <!-- 大封面图片 -->
+                        <div class="video-mask hidden">
+                            <div class="img-warp">
+                                <img src="@variety.bigcover" referrerPolicy="no-referrer">
+                                <!--评分为0时不显示-->
+                                @if (variety.rating != 0)
+                                {
+                                    <!--确保显示一位小数-->
+                                    <span class="pic-tag-top2">@String.Format("{0:F1}", variety.rating)</span>
+                                }
+                                else
+                                {
+                                    <span class="pic-text-right2">@variety.status</span>
+                                }
+                            </div>
+                            <div class="content">
+                                <span title="@variety.title" class="content-title">@variety.title</span>
+                                <!--前端处理标签分割，比较消耗性能-->
+                                <div class="tags">
+                                    @{
+                                        string[] tags = variety.tag.Split(';');
+                                        int tagCount = 0;
+                                        foreach (var tag in tags)
+                                        {
+                                            if (tagCount >= 4)
+                                            {
+                                                break;
+                                            }
+
+                                            <span title="@variety.tag" class="tag">@tag</span>
+
+                                            tagCount++;
+                                        }
+                                    }
+                                </div>
+                                <span title="@variety.actor" class="actor">@variety.actor</span>
+                                <div class="desc" title="@variety.desc">
+                                    @variety.desc
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='/VideoDetails/Details?tvid=@variety.tvid'">
+                                    <img class="play-icon" src="~/Content/img/play.svg">
+                                    立即播放
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </section>
+        <!--动漫推荐-->
+        <section>
+            <div class="rec-search">
+                <strong class="aTitle">动漫推荐</strong>
+                <a href="/FrontStage/Anime">查看更多>></a>
+            </div>
+            <ul class="video">
+                @foreach (var anime in Model.Anime)
+                {
+                    <li>
+                        <div class="video-item">
+                            <a href="/VideoDetails/Details?tvid=@anime.tvid" title="@anime.title">
+                                <div class="video-thumb">
+                                    <!--盗链 Prompt4-->
+                                    <img class="video-thumb" src="@anime.cover" referrerPolicy="no-referrer">
+                                    <!--评分为0时不显示-->
+                                    @if (anime.rating != 0)
+                                    {
+                                        <!--确保显示一位小数-->
+                                        <span class="pic-tag-top">@String.Format("{0:F1}", anime.rating)</span>
+                                    }
+                                    <span class="pic-text-right">@anime.status</span>
+                                </div>
+                            </a>
+                            <div class="video-title">
+                                <a href="/VideoDetails/Details?tvid=@anime.tvid" title="@anime.title">@anime.title</a>
+                            </div>
+                        </div>
+                        <!-- 大封面图片 -->
+                        <div class="video-mask hidden">
+                            <div class="img-warp">
+                                <img src="@anime.bigcover" referrerPolicy="no-referrer">
+                                <!--评分为0时不显示-->
+                                @if (anime.rating != 0)
+                                {
+                                    <!--确保显示一位小数-->
+                                    <span class="pic-tag-top2">@String.Format("{0:F1}", anime.rating)</span>
+                                }
+                                else
+                                {
+                                    <span class="pic-text-right2">@anime.status</span>
+                                }
+                            </div>
+                            <div class="content">
+                                <span title="@anime.title" class="content-title">@anime.title</span>
+                                <!--前端处理标签分割，比较消耗性能-->
+                                <div class="tags">
+                                    @{
+                                        string[] tags = anime.tag.Split(';');
+                                        int tagCount = 0;
+                                        foreach (var tag in tags)
+                                        {
+                                            if (tagCount >= 4)
+                                            {
+                                                break;
+                                            }
+
+                                            <span title="@anime.tag" class="tag">@tag</span>
+
+                                            tagCount++;
+                                        }
+                                    }
+                                </div>
+                                <span title="@anime.actor" class="actor">@anime.actor</span>
+                                <div class="desc" title="@anime.desc">
+                                    @anime.desc
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='/VideoDetails/Details?tvid=@anime.tvid'">
+                                    <img class="play-icon" src="~/Content/img/play.svg">
+                                    立即播放
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </section>
+        <!--纪录片推荐-->
+        <section>
+            <div class="rec-search">
+                <strong class="aTitle">纪录片推荐</strong>
+                <a href="/FrontStage/Documentary">查看更多>></a>
+            </div>
+            <ul class="video">
+                @foreach (var documentary in Model.Documentary)
+                {
+                    <li>
+                        <div class="video-item">
+                            <a href="/VideoDetails/Details?tvid=@documentary.tvid" title="@documentary.title">
+                                <div class="video-thumb">
+                                    <!--盗链 Prompt4-->
+                                    <img class="video-thumb" src="@documentary.cover" referrerPolicy="no-referrer">
+                                    <!--评分为0时不显示-->
+                                    @if (documentary.rating != 0)
+                                    {
+                                        <!--确保显示一位小数-->
+                                        <span class="pic-tag-top">@String.Format("{0:F1}", documentary.rating)</span>
+                                    }
+                                    <span class="pic-text-right">@documentary.status</span>
+                                </div>
+                            </a>
+                            <div class="video-title">
+                                <a href="/VideoDetails/Details?tvid=@documentary.tvid" title="@documentary.title">@documentary.title</a>
+                            </div>
+                        </div>
+                        <!-- 大封面图片 -->
+                        <div class="video-mask hidden">
+                            <div class="img-warp">
+                                <img src="@documentary.bigcover" referrerPolicy="no-referrer">
+                                <!--评分为0时不显示-->
+                                @if (documentary.rating != 0)
+                                {
+                                    <!--确保显示一位小数-->
+                                    <span class="pic-tag-top2">@String.Format("{0:F1}", documentary.rating)</span>
+                                }
+                                else
+                                {
+                                    <span class="pic-text-right2">@documentary.status</span>
+                                }
+                            </div>
+                            <div class="content">
+                                <span title="@documentary.title" class="content-title">@documentary.title</span>
+                                <!--前端处理标签分割，比较消耗性能-->
+                                <div class="tags">
+                                    @{
+                                        string[] tags = documentary.tag.Split(';');
+                                        int tagCount = 0;
+                                        foreach (var tag in tags)
+                                        {
+                                            if (tagCount >= 4)
+                                            {
+                                                break;
+                                            }
+
+                                            <span title="@documentary.tag" class="tag">@tag</span>
+
+                                            tagCount++;
+                                        }
+                                    }
+                                </div>
+                                <span title="@documentary.actor" class="actor">@documentary.actor</span>
+                                <div class="desc" title="@documentary.desc">
+                                    @documentary.desc
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='/VideoDetails/Details?tvid=@documentary.tvid'">
+                                    <img class="play-icon" src="~/Content/img/play.svg">
+                                    立即播放
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </section>
+
+    </main>
+
+    <!--JS脚本-->
+    <!--获取元素的脚本，需要在其他脚本前-->
+    <script>
+        // 获取用户id和下拉框的位置
+        var userId = document.getElementById('user-id');
+        var dropdown = document.getElementById('dropdown');
+        var TempDataNotice = '@TempData["notice"]';
+        var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var advertisers = document.getElementsByClassName('advertiser');
+            var delay = 30;
+
+            Array.from(advertisers).forEach((element) => {
+                moveElement(element);
+            });
+
+            function moveElement(element) {
+                var xPos = Math.floor(Math.random() * 500); // 示例起始位置
+                var yPos = Math.floor(Math.random() * 500);
+                var step = 1; // 移动步长
+                var directionX = Math.random() > 0.5 ? 1 : -1; // 随机移动方向
+                var directionY = Math.random() > 0.5 ? 1 : -1;
+
+                function changePos() {
+                    var width = window.innerWidth - element.offsetWidth;
+                    var height = window.innerHeight - element.offsetHeight;
+
+                    // 更新位置
+                    xPos += step * directionX;
+                    yPos += step * directionY;
+
+                    // 边界检查，反转方向
+                    if (xPos <= 0 || xPos >= width) {
+                        directionX *= -1;
+                        xPos += step * directionX;
+                    }
+                    if (yPos <= 0 || yPos >= height) {
+                        directionY *= -1;
+                        yPos += step * directionY;
+                    }
+
+                    // 应用新位置
+                    element.style.left = xPos + 'px';
+                    element.style.top = yPos + 'px';
+                }
+
+                setInterval(changePos, delay);
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            var closeButtons = document.querySelectorAll('.close-ad');
+            closeButtons.forEach(function (button) {
+                button.onclick = function () {
+                    this.parentNode.style.display = 'none';
+                };
+            });
+        });
+    </script>
+
+
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <script src="~/Content/js/frontstage.js"></script>
+
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

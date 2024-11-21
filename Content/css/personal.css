@@ -1,0 +1,119 @@
+﻿/* 个人中心主体样式 */
+/* 个人中心样式 */
+.personal-center {
+    padding: 20px;
+}
+
+.profile-section {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+    text-align: center;
+}
+
+/* 修改头像样式 */
+.EditIcon {
+    margin-top: 20px;
+}
+
+/* 用户名样式 */
+.user-id {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* 修改密码、修改昵称样式（示例） */
+.EditPsw,
+.EditName,
+.EditAdvertiser {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* 用户注册时间样式 */
+.user-regtime {
+    color: #888;
+    margin-top: 10px;
+}
+.edit-icon {
+    position: relative;
+    width: 20px;
+    background-size: cover;
+    cursor: pointer;
+}
+.ad-line {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+/* 加载动画背景 */
+.modal {
+    display: none;
+    position: fixed; /* 固定定位，使其脱离文档流并固定在屏幕上 */
+    z-index: 100001; /* z-index属性设置堆叠顺序，1确保它在页面上的其他元素之上 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* 如果内容超出，则允许滚动 */
+    background-color: rgb(0,0,0); /* 背景颜色为黑色，不透明 */
+    background-color: rgba(0,0,0,0.4); /* 背景颜色为半透明黑色，增加了透明度 */
+    padding-top: 60px; /* 从顶部开始的内边距，为了在顶部留出一些空间 */
+}
+
+/* 加载器本身 */
+.loader {
+    border: 16px solid #f3f3f3; /* 边框为浅灰色，表示加载器的轨迹 */
+    border-top: 16px solid sandybrown; /* 上边框为蓝色，表示加载器的颜色 */
+    border-radius: 50%; /* 边框的半径为50%，使其成为一个圆形 */
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite; /* 应用旋转动画，每次持续2秒，速度相同（linear），无限循环（infinite） */
+    margin: auto; /* 自动外边距，使加载器水平垂直居中 */
+}
+
+/* 动画效果 */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg); /* 动画开始时，旋转角度为0度 */
+    }
+
+    100% {
+        transform: rotate(360deg); /* 动画结束时，旋转角度为360度，形成一个完整的圆周旋转 */
+    }
+}
+/* 自定义的信息文本样式 */
+.info-text {
+    color: sandybrown; /* 设置文字颜色为亮红色 */
+    font-size: 1.5em; /* 设置文字大小 */
+    text-align: center; /* 让文本居中 */
+    font-weight: bold; /* 文本加粗 */
+    margin: 20px auto; /* 在元素的顶部增加一些空间 */
+    width: 500px;
+    font-family: 'Arial', sans-serif; /* 设置字体 */
+    animation: fadeIn 2s; /* 使用淡入效果 */
+    border: 3px solid sandybrown; /* 添加亮红色边框 */
+    padding: 10px; /* 在文本周围增加一些填充 */
+    border-radius: 5px; /* 边框圆角效果 */
+    background-color: #fdfdfd; /* 轻微的背景颜色 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加轻微的阴影效果 */
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

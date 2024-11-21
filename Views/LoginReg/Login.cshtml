@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/login-reg.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+    <link rel="stylesheet" href="~/Content/css/backstage.css">
+</head>
+<body style="background-color: black !important;">
+    <div id="header">
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <div id="title">
+            <ul>
+                <li><a href="/FrontStage/Index">首页</a></li>
+                <li><a href="movies.html">电影</a></li>
+                <li><a href="episodes.html">电视剧</a></li>
+                <li><a href="variety.html">综艺</a></li>
+                <li><a href="anime.html">动漫</a></li>
+                <li><a href="documentary.html">纪录片</a></li>
+            </ul>
+        </div>
+    </div>
+    <main class="container">
+        <!-- 登录模块 -->
+        <div class="login">
+            <h2>用户登录</h2>
+            <!--onsubmit为False时，阻止提交（Prompt1）-->
+            <form method="post" id="myForm" onsubmit="return checkFormLog()" action="/LoginReg/Login">
+                <div class="form-group">
+                    <label for="usn"><input type="text" maxlength="16" id="usn" name="username" value="@ViewBag.username" placeholder="请输入账号"></label>
+                    <div class="prompt" id="noticeUser"></div>
+                    <label for="pwd">
+                        <input type="password" maxlength="16" id="pwd" name="password" placeholder="请输入密码">
+                        <img src="../Content/img/eye2.png" class="eye-icon" id="eyeIconPwd" onclick="togglePassword('pwd','eyeIconPwd')">
+                    </label>
+                    <div class="prompt" id="noticePwd"></div>
+                </div>
+                <!--登录错误信息提示-->
+                <div class="prompt" id="notice">@ViewBag.notice</div>
+                <button type="submit" class="login-reg-button">登录</button>
+            </form>
+            <div class="login-reg">
+                <a href="/LoginReg/Register">没有账号?去注册</a>
+            </div>
+        </div>
+    </main>
+
+    <!--JS脚本-->
+    <!--js脚本引用-->
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <!--包含‘本地检查表单’、‘清除提示信息’、‘密码可见与不可见’-->
+    <script src="~/Content/js/loginreg.js"></script>
+
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

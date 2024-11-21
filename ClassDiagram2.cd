@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GProject.BundleConfig" Collapsed="true">
+    <Position X="1.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Start\BundleConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.FilterConfig" Collapsed="true">
+    <Position X="5.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>App_Start\FilterConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.MvcApplication" Collapsed="true">
+    <Position X="6.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Global.asax.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GraduationProject.RouteConfig" Collapsed="true">
+    <Position X="2.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>App_Start\RouteConfig.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.AddController" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAIAAAQAAAAAIAAAAAAAAEAAAAgQAAAEAiAAAA=</HashCode>
+      <FileName>Controllers\AddController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.Config" Collapsed="true">
+    <Position X="1.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAgAABAAAAQAAAAACAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\FrontStageController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.Order" Collapsed="true">
+    <Position X="6.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAACAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAI=</HashCode>
+      <FileName>Controllers\FrontStageController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.CombinedViewModel" Collapsed="true">
+    <Position X="5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAABAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\FrontStageController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.AdvertiserInfoViewModel" Collapsed="true">
+    <Position X="3" Y="6.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAABAgAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Controllers\FrontStageController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.FrontStageController" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAEAABACAQGAAEAAAAAIAIAAkABABAgIMAAAAiAAE=</HashCode>
+      <FileName>Controllers\FrontStageController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.GetVideoController" Collapsed="true">
+    <Position X="0.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEAAEAAAAAQIAAABAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\GetVideoController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.SearchController" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAIAIQAAAAAAAAAAAgACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\SearchController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Controllers.VideoDetailsController" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAIAgAAAAAAAA=</HashCode>
+      <FileName>Controllers\VideoDetailsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GraduationProject.Controllers.BackStageController" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAICYAAAgAQAAAEAAAAAAAAAIAgAAAAAEABAAAAIAA=</HashCode>
+      <FileName>Controllers\BackStageController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GraduationProject.Controllers.EditController" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAACAAAQAAAAAAAAAAAAAEEBAACAIAAAEAiAAgg=</HashCode>
+      <FileName>Controllers\EditController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GraduationProject.Controllers.LoginRegController" Collapsed="true">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Controllers\LoginRegController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.gpdbEntities" Collapsed="true">
+    <Position X="8.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAEAAAAAAABAAAAAAAEAAAAAAgAAAAAACAAAA=</HashCode>
+      <FileName>Models\gpDB.Context.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.advertisertb" Collapsed="true">
+    <Position X="3.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAIAAAAABAACAAEIAACQAAAACAAAAAAAgAA=</HashCode>
+      <FileName>Models\advertisertb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.comtb" Collapsed="true">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAAAQAAAAAAAAAAAAAAEAIAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\comtb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.transaction_recordtb" Collapsed="true">
+    <Position X="10" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAgAAAAAAAAAAAKAAEAAAAAgAAACIAAAAAAAAA=</HashCode>
+      <FileName>Models\transaction_recordtb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.usertb" Collapsed="true">
+    <Position X="11.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAEAAAEAAAAAAQAAAgAAAwA=</HashCode>
+      <FileName>Models\usertb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.videotb" Collapsed="true">
+    <Position X="11.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQFACAQQAEQAAAAAIAAAAAAAQABAABAIAAAgQAAAEA=</HashCode>
+      <FileName>Models\videotb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.Video" Collapsed="true">
+    <Position X="8.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABACABAEBAAggEAAAABAAAAAAAAAAAEBAQAAQCAAAQE=</HashCode>
+      <FileName>Models\Video.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.VideoHotModel" Collapsed="true">
+    <Position X="10" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAACBAEAAAAAAAAAAAAAAAAAAAAIAAAAAAAAk=</HashCode>
+      <FileName>Models\Video.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GProject.Models.CommentModel" Collapsed="true">
+    <Position X="0.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Models\Video.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

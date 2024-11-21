@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="gpdbModelStoreContainer" CdmEntityContainer="gpdbEntities">
+    <EntitySetMapping Name="videotb">
+      <EntityTypeMapping TypeName="gpdbModel.videotb">
+        <MappingFragment StoreEntitySet="videotb">
+          <ScalarProperty Name="actor" ColumnName="actor" />
+          <ScalarProperty Name="director" ColumnName="director" />
+          <ScalarProperty Name="bigcover" ColumnName="bigcover" />
+          <ScalarProperty Name="time" ColumnName="time" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="desc" ColumnName="desc" />
+          <ScalarProperty Name="tvid" ColumnName="tvid" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="hotscore" ColumnName="hotscore" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="rating" ColumnName="rating" />
+          <ScalarProperty Name="year" ColumnName="year" />
+          <ScalarProperty Name="tag" ColumnName="tag" />
+          <ScalarProperty Name="cover" ColumnName="cover" />
+          <ScalarProperty Name="link" ColumnName="link" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="videoID" ColumnName="videoID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="comtb">
+      <EntityTypeMapping TypeName="gpdbModel.comtb">
+        <MappingFragment StoreEntitySet="comtb">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="tvid" ColumnName="tvid" />
+          <ScalarProperty Name="comtime" ColumnName="comtime" />
+          <ScalarProperty Name="content" ColumnName="content" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="comID" ColumnName="comID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="usertb">
+      <EntityTypeMapping TypeName="gpdbModel.usertb">
+        <MappingFragment StoreEntitySet="usertb">
+          <ScalarProperty Name="admin" ColumnName="admin" />
+          <ScalarProperty Name="icon" ColumnName="icon" />
+          <ScalarProperty Name="regtime" ColumnName="regtime" />
+          <ScalarProperty Name="nickname" ColumnName="nickname" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="advertisertb">
+      <EntityTypeMapping TypeName="gpdbModel.advertisertb">
+        <MappingFragment StoreEntitySet="advertisertb">
+          <ScalarProperty Name="balance" ColumnName="balance" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="payment_status" ColumnName="payment_status" />
+          <ScalarProperty Name="cost" ColumnName="cost" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="end_date" ColumnName="end_date" />
+          <ScalarProperty Name="start_date" ColumnName="start_date" />
+          <ScalarProperty Name="ad_content" ColumnName="ad_content" />
+          <ScalarProperty Name="ad_name" ColumnName="ad_name" />
+          <ScalarProperty Name="advertiserID" ColumnName="advertiserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="transaction_recordtb">
+      <EntityTypeMapping TypeName="gpdbModel.transaction_recordtb">
+        <MappingFragment StoreEntitySet="transaction_recordtb">
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="trade_status" ColumnName="trade_status" />
+          <ScalarProperty Name="alipay_trade_no" ColumnName="alipay_trade_no" />
+          <ScalarProperty Name="transaction_date" ColumnName="transaction_date" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="transaction_type" ColumnName="transaction_type" />
+          <ScalarProperty Name="ad_name" ColumnName="ad_name" />
+          <ScalarProperty Name="transactionID" ColumnName="transactionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

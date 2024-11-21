@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="gpdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="gpdbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="videotb" EntityType="gpdbModel.videotb" />
+    <EntitySet Name="comtb" EntityType="gpdbModel.comtb" />
+    <EntitySet Name="usertb" EntityType="gpdbModel.usertb" />
+    <EntitySet Name="advertisertb" EntityType="gpdbModel.advertisertb" />
+    <EntitySet Name="transaction_recordtb" EntityType="gpdbModel.transaction_recordtb" />
+  </EntityContainer>
+  <EntityType Name="videotb">
+    <Key>
+      <PropertyRef Name="videoID" />
+    </Key>
+    <Property Name="videoID" Type="Int32" Nullable="false" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="link" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="cover" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="tag" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="year" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="rating" Type="Single" />
+    <Property Name="status" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="hotscore" Type="Int32" />
+    <Property Name="type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="tvid" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="desc" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="date" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="time" Type="Int32" />
+    <Property Name="bigcover" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="director" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="actor" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="comtb">
+    <Key>
+      <PropertyRef Name="comID" />
+    </Key>
+    <Property Name="comID" Type="Int32" Nullable="false" />
+    <Property Name="username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="content" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="comtime" Type="DateTime" />
+    <Property Name="tvid" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="status" Type="SByte" />
+  </EntityType>
+  <EntityType Name="usertb">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="nickname" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="regtime" Type="DateTime" />
+    <Property Name="icon" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="admin" Type="SByte" />
+  </EntityType>
+  <EntityType Name="advertisertb">
+    <Key>
+      <PropertyRef Name="advertiserID" />
+    </Key>
+    <Property Name="advertiserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ad_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="ad_content" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="start_date" Type="DateTime" />
+    <Property Name="end_date" Type="DateTime" />
+    <Property Name="status" Type="SByte" />
+    <Property Name="cost" Type="Decimal" />
+    <Property Name="payment_status" Type="SByte" />
+    <Property Name="username" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="balance" Type="Decimal" />
+  </EntityType>
+  <EntityType Name="transaction_recordtb">
+    <Key>
+      <PropertyRef Name="transactionID" />
+    </Key>
+    <Property Name="transactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ad_name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="transaction_type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="amount" Type="Decimal" Nullable="false" />
+    <Property Name="transaction_date" Type="DateTime" Nullable="false" />
+    <Property Name="alipay_trade_no" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+    <Property Name="trade_status" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+    <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>

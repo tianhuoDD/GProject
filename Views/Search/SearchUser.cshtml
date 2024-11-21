@@ -1,0 +1,119 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/backstage.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+    <link rel="stylesheet" href="~/Content/css/PagedList.css">
+</head>
+<body style="background-color: #EFEFEF !important" class="hidden">
+    <div id="header">
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <div id="title">
+            <ul>
+                <li><a href="/BackStage/UserMan" style="border-bottom: 3px solid rgb(255, 255, 0)">后台管理</a></li>
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            欢迎，
+            <a id="user-id"></a>
+        </p>
+        <!--登出按钮-->
+        <div id="logout">
+            <a href="/LoginReg/Login">退出登录</a>
+        </div>
+    </div>
+    <main class="main-container">
+        <!-- 左侧栏 -->
+        <div class="main-left">
+            <ul>
+                <li><a href="/BackStage/VideoMan" class="sidebar-link">视频管理</a></li>
+                <li><a href="/BackStage/UserMan" class="sidebar-link" style="background-color: rgb(178, 178, 179);">用户管理</a></li>
+                <li><a href="/BackStage/CommentMan" class="sidebar-link">评论管理</a></li>
+                <li><a href="/BackStage/AdvertiserMan" class="sidebar-link">广告管理</a></li>
+                <li><a href="/BackStage/OrderMan" class="sidebar-link">账单管理</a></li>
+                <li><a href="/FrontStage/Index" class="sidebar-link">返回首页</a></li>
+            </ul>
+        </div>
+        <!-- 右侧栏 -->
+        <div class="main-right">
+            <!-- 搜索栏 -->
+            <div class="backsearch ">
+                <form action="/Search/SearchUser" method="get">
+                    <div class="backsearch-bar">
+                        <!--使用value来存储搜索成功的值-->
+                        <input type="text" name="searchTerm" placeholder="用户名称丨关键字" value="@ViewBag.SearchTerm">
+                        <button type="submit">查询</button>
+                        <button type="button" id="addButtonUser">添加</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="list">
+                <table class="table">
+                    <tr>
+                        <th>选择</th>
+                        <th>ID</th>
+                        <th>账号</th>
+                        <th>密码</th>
+                        <th>昵称</th>
+                        <th>注册时间</th>
+                        <th>头像</th>
+                        <th>管理员标识</th>
+                    </tr>
+                    <!-- 使用循环遍历userTB -->
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>
+                                <!-- "?id= *user.id" 用于确认提交哪条信息 -->
+                                <a href="/Edit/EditUser?id=@user.id">编辑</a>
+                                <a href="/BackStage/DeleteUser/@user.id" onclick="return confirmDeleteUser(@user.id,@user.username)">删除</a>
+                            </td>
+                            <td>@user.id</td>
+                            <td>@user.username</td>
+                            <td>@user.password</td>
+                            <td>@user.nickname</td>
+                            <td>@user.regtime</td>
+                            <td>@user.icon</td>
+                            <td>@(user.admin == 1 ? "True" : "False")</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <!-- 其他HTML代码 -->
+        </div>
+    </main>
+    <div>
+        <!-- 分页控件 -->
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("SearchUser", new { page, SearchTerm = ViewBag.SearchTerm }))
+    </div>
+    <!--JS脚本-->
+    <script>
+            //在 Razor 视图中传递 TempData 的值给 backstage.js
+            var TempDataNotice = '@TempData["notice"]';
+            var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <!--js脚本引用-->
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <!--包含‘TempData提示’、‘ViewBag提示’、‘清空表单’、‘检查空信息’、‘用户名记录’、‘登出按钮’、‘删除用户’-->
+    <script src="~/Content/js/backstage.js"></script>
+    <script src="~/Content/js/userman.js"></script>
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

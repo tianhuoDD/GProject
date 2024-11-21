@@ -1,0 +1,299 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/details.css">
+    <link rel="stylesheet" href="~/Content/css/video.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+
+</head>
+<body style="background-color: black !important;">
+    <div id="header">
+        <!--Logo-->
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <!--导航栏-->
+        <div id="title">
+            <ul>
+                <li><a href="/FrontStage/Index">首页</a></li>
+                <li><a href="/FrontStage/Movies">电影</a></li>
+                <li><a href="/FrontStage/Episodes">电视剧</a></li>
+                <li><a href="/FrontStage/Variety">综艺</a></li>
+                <li><a href="/FrontStage/Anime">动漫</a></li>
+                <li><a href="/FrontStage/Documentary">纪录片</a></li>
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            <a id="user-id"></a>
+            <div id="dropdown" style="display: none;">
+                <a onclick="openProfile()">个人中心</a>
+                <a onclick="openAdmin()">后台管理</a>
+            </div>
+        </p>
+        <!--登录、注销按钮显示-->
+        <div id="login">
+            <!-- 如果已登录，则显示用户名和注销按钮 -->
+            <a href="/LoginReg/Login" id="logout">注销</a>
+            <!-- 如果未登录，则显示登录按钮 -->
+            <a href="/LoginReg/Login" id="login-btn">登录</a>
+        </div>
+    </div>
+    @model GProject.Models.CommentModel
+    <main>
+        <!--视频及详情-->
+        <section class="main">
+            <!--选择线路-->
+            <div class="PlayVideo">
+                <select size="1" class="form-control">
+                    <option value="https://www.pangujiexi.cc/jiexi.php?url=">【线路01】</option>
+                    <option value="https://im1907.top/?jx=">【线路02】</option>
+                    <option value="https://yparse.jn1.cc/index.php?url=">【线路03】</option>
+                    <option value="https://jx.aidouer.net/?url=">【线路04】</option>
+                    <option value="https://www.ckplayer.vip/jiexi/?url=">【线路05】</option>
+                    <option value="https://jx.xmflv.com/?url=">【线路06】</option>
+                    <option value="https://jx.m3u8.tv/jiexi/?url=">【线路07】</option>
+                    <option value="https://www.8090g.cn/jiexi/?url=">【线路08】</option>
+                    <option value="https://jx.jsonplayer.com/player/?url=" selected="">【高速稳定】</option>
+                </select>
+                <!-- 在适当的位置添加刷新按钮 -->
+                <div id="refreshButton"><img src="~/Content/img/refresh.png" class="refresh-icon"></div>
+            </div>
+            <!--视频-->
+            <iframe src="https://jx.jsonplayer.com/player/?url=@Model.Video.link" frameborder="0" allowfullscreen></iframe>
+            <!--视频介绍-->
+            <div class="introduce">
+                <h2>@Model.Video.title</h2>
+                <p>简介: @Model.Video.desc</p>
+                <p>导演: @Model.Video.director</p>
+                <p>主演: @Model.Video.actor</p>
+                <p>类型: @Model.Video.tag</p>
+                <p>上映: @Model.Video.date</p>
+                <p>片长: @Model.Video.time (s)</p>
+                @if (Model.Video.rating != 0)
+                {
+                    <p>评分: @Model.Video.rating</p>
+                }
+                else
+                {
+                    <p>状态: @Model.Video.status</p>
+                }
+                <p>原视频: @Model.Video.link</p>
+                <p>视频类型: @Model.Video.type</p>
+            </div>
+
+        </section>
+        <!--评论-->
+        <section>
+            <h2 class="iqyTitle">爱奇艺评论:</h2>
+            <h2 class="localTitle" style="display:none;">本站评论:</h2>
+            <div class="cho-content">
+                <select class="commentSelector">
+                    <option value="iqy" selected="">爱奇艺评论</option>
+                    <option value="local">本站评论</option>
+                </select>
+            </div>
+            <!--爱奇艺评论内容-->
+            <div class="iqy">
+                <div class="comments"></div>
+                <!--加载更多按钮-->
+                <div id="loadMore">点击加载更多...</div>
+                <div id="noMore">没有更多了...</div>
+            </div>
+
+            <!--本站评论-->
+            <div class="local" style="display:none;">
+                <div class="local-comments">
+                    @{ 
+                        foreach (var Comment in Model.Comment)
+                        {
+
+                            if (Comment.tvid == Model.Video.tvid && Comment.status == 1 )
+                            {
+                                // 查找对应的用户
+                                var user = Model.User.FirstOrDefault(u => u.username == Comment.username);
+                                var imageSrc = "../Content/img/icon.png";
+                                if (user != null && user.icon != null)
+                                {
+                                    var base64String = Convert.ToBase64String(user.icon);
+                                    imageSrc = $"data:image/png;base64,{base64String}";
+                                }
+                                <div class="comment-main">
+                                    <div class="comment-head">
+                                        <span><img src="@imageSrc"></span>
+                                        <span>@user.nickname</span>
+                                        <span>@Comment.comtime</span>
+                                    </div>
+                                    <div class="comment-content">
+                                        <p>@Comment.content</p>
+                                    </div>
+                                </div>
+                            }
+                        }
+}
+                    <!-- 评论输入界面 -->
+                    <div class="input-comment">
+                        <h3>发表评论</h3>
+                        <form id="commentForm">
+                            <div>
+                                <label for="commentText">
+                                    <textarea id="commentText" name="commentText" rows="4" required></textarea>
+                                </label>
+                            </div>
+                            <div>
+                                <button type="submit">提交评论</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <!--JS脚本-->
+    <!--获取元素的脚本，需要在其他脚本前-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        /* 切换评论 */
+        document.addEventListener('DOMContentLoaded', function () {
+            var commentSelector = document.querySelector('.commentSelector');
+            var iqyTitle = document.querySelector('.iqyTitle');
+            var localTitle = document.querySelector('.localTitle');
+            var iqyComments = document.querySelector('.iqy');
+            var localComments = document.querySelector('.local');
+
+            commentSelector.addEventListener('change', function () {
+                if (commentSelector.value === 'iqy') {
+                    iqyTitle.style.display = 'block';
+                    iqyComments.style.display = 'block';
+                    localTitle.style.display = 'none';
+                    localComments.style.display = 'none';
+                } else {
+                    iqyTitle.style.display = 'none';
+                    iqyComments.style.display = 'none';
+                    localTitle.style.display = 'block';
+                    localComments.style.display = 'block';
+                }
+            });
+        });
+        /* 爱奇艺评论展示 */
+        $(document).ready(function () {
+            // 声明全局变量 commentId
+            var commentId = "";
+            // 进入页面默认获取评论一次
+            getComments(commentId);
+            // 获得评论
+            function getComments(commentId) {
+                // API地址
+                var apiUrl = `/VideoDetails/GetComments?tvid=@Model.Video.tvid&commentId=${commentId}`; // 使用你的控制器和方法的实际路径
+                // 使用ajax获取请求
+                $.ajax({
+                    url: apiUrl,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        // 处理获取的评论数据
+                        displayComments(data);
+                    },
+                    error: function (error) {
+                        alert("返回json格式错误，请查看控制台日志~");
+                        console.error("Error fetching comments:", error);
+                        console.log("Response Text:", error.responseText);
+                    }
+                });
+            }
+
+            // 显示评论的函数
+            function displayComments(data) {
+                var comments = data.data.comments; // 获取评论数组
+                var commentsSection = $(".comments"); // 评论区域的容器
+                // 检查评论是否存在且是数组
+                if (Array.isArray(comments)) {
+                    // 如果数组为空
+                    if (comments.length === 0) {
+                        // 隐藏 加载更多 按钮
+                        $('#loadMore').hide();
+                        // 显示 没有更多提示
+                        $('#noMore').show();
+                    } else {
+                        // 显示 加载更多 按钮
+                        $('#loadMore').show();
+                        // 隐藏 没有更多提示
+                        $('#noMore').hide();
+                    }
+                    // 遍历评论数组并添加到页面
+                    for (var i = 0; i < comments.length; i++) {
+                        // 评论内容
+                        var comment = comments[i];
+                        // 获取用户信息
+                        var user = comment.userInfo;
+                        // 创建评论元素
+                        var commentElement = $(
+                            "<div class='comment-main'>" +
+                            "<div class='comment-head'>" +
+                            "<span><img src='" + user.icon + "' referrerPolicy='no-referrer'></span>" +
+                            "<span>" + user.uname + "</span>" +
+                            "<span>" + formatTime(comment.addTime) + "</span>" +
+                            "</div>" +
+                            "<div class='comment-content'>" +
+                            "<p>" + comment.content + "</p>" +
+                            "</div>" +
+                            "</div>");
+                        // 将评论元素添加到评论区域
+                        commentsSection.append(commentElement);
+
+                        // 如果是最后一个评论
+                        if (i == comments.length - 1) {
+                            // 获取 comment.id 的数据
+                            commentId = comment.id;
+                        }
+                    }
+                } else {
+                    alert("api返回内容错误~")
+                    console.error("Comments data is not an array:", comments);
+                }
+            }
+            // 点击加载更多按钮的事件
+            $("#loadMore").on("click", function () {
+                // 执行 getComments(userid)
+                getComments(commentId);
+            });
+            // 将 Unix 时间戳转换为格式化时间
+            function formatTime(unixTimestamp) {
+                var date = new Date(unixTimestamp * 1000); // 乘以1000，将秒转换为毫秒
+                var year = date.getFullYear();
+                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                var day = ("0" + date.getDate()).slice(-2);
+                var hours = ("0" + date.getHours()).slice(-2);
+                var minutes = ("0" + date.getMinutes()).slice(-2);
+                var seconds = ("0" + date.getSeconds()).slice(-2);
+
+                return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+            }
+        });
+    </script>
+    <script>
+        // 获取用户id和下拉框的位置
+        var userId = document.getElementById('user-id');
+        var dropdown = document.getElementById('dropdown');
+        var tvid = '@Model.Video.tvid';
+        var link = '@Model.Video.link';
+    </script>
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <script src="~/Content/js/details.js"></script>
+    <!--页脚-->
+    <footer id="footer" style="line-height:1.5;">
+        <div class="footer-info">
+            <p style="color: hsla(0,0%,100%,.5);">本站提供的播放资源均采集于互联网,本站只提供web页面服务,并不提供影片资源存储,也不参与录制,上传。</p>
+            <p style="color: hsla(0,0%,100%,.5);">视频播放接口调用自第三方网站,视频中的广告,大多数来自境外非法网站,并非本站投放,请勿相信。</p>
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

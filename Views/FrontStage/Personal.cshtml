@@ -1,0 +1,674 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/advertiserman.css">
+    <link rel="stylesheet" href="~/Content/css/personal.css">
+    <link rel="stylesheet" href="~/Content/css/video.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+</head>
+<body style="background-color: black !important;">
+    <div id="header">
+        <!--Logo-->
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <!--导航栏-->
+        <div id="title">
+            <ul>
+                <li><a href="/FrontStage/Index">首页</a></li>
+                <li><a href="/FrontStage/Movies">电影</a></li>
+                <li><a href="/FrontStage/Episodes">电视剧</a></li>
+                <li><a href="/FrontStage/Variety">综艺</a></li>
+                <li><a href="/FrontStage/Anime">动漫</a></li>
+                <li><a href="/FrontStage/Documentary">纪录片</a></li>
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            <a id="user-id"></a>
+            <div id="dropdown" style="display: none;">
+                <a onclick="openProfile()">个人中心</a>
+                <a onclick="openAdmin()">后台管理</a>
+            </div>
+        </p>
+        <!--登录、注销按钮显示-->
+        <div id="login">
+            <!-- 如果已登录，则显示用户名和注销按钮 -->
+            <a href="/LoginReg/Login" id="logout">注销</a>
+            <!-- 如果未登录，则显示登录按钮 -->
+            <a href="/LoginReg/Login" id="login-btn">登录</a>
+        </div>
+    </div>
+    <!--主要内容-->
+    @model  GProject.Controllers.CombinedViewModel
+
+
+    <!-- 个人中心主要内容 -->
+    <main class="container personal-center">
+        <div class="profile-section">
+            <!-- 个人信息展示 -->
+            <div class="user-info">
+                @{
+                    var imageSrc = "../Content/img/icon.png";
+                    if (Model.Usertb != null && Model.Usertb.icon != null)
+                    {
+                        var base64String = Convert.ToBase64String(Model.Usertb.icon);
+                        imageSrc = $"data:image/png;base64,{base64String}";
+                    }
+                }
+                <!-- 修改头像 -->
+                <div class="EditIcon">
+                    <img id="userImage" src="@imageSrc" style="width: 50px; border-radius:10px;">
+                    <input type="file" id="imageInput" style="display:none;" accept="image/*" onchange="editIcon()">
+                    <label for="imageInput">
+                        <img src="../Content/img/edit.png" class="edit-icon">
+                    </label>
+                </div>
+
+                <!--用户名-->
+                <div class="user-id">@Model.Usertb.username</div>
+                <!--修改密码-->
+                <div class="EditPsw">
+                    <span>密码: ********</span>
+                    <button class="edit-btn" onclick="editPassword()">编辑</button>
+                </div>
+                <!-- 修改密码的模态框 -->
+                <div id="editPasswordModal" class="modal2" style="display:none">
+                    <div class="modal-content">
+                        <label for="newPassword">新密码:</label>
+                        <input type="password" id="newPassword">
+                    </div>
+                    <div class="modal-content">
+                        <label for="newCofPassword">重复密码:</label>
+                        <input type="password" id="newCofPassword">
+                    </div>
+                    <button onclick="savePassword()">保存</button>
+                    <button onclick="closeModal()">取消</button>
+                </div>
+                <!--修改昵称-->
+                <div class="EditName">
+                    <span>昵称：@Model.Usertb.nickname</span>
+                    <button class="edit-btn" onclick="editName()">编辑</button>
+                </div>
+                <!-- 修改昵称的模态框 -->
+                <div id="editNameModal" class="modal2" style="display:none">
+                    <div class="modal-content">
+                        <label for="newName">新昵称:</label>
+                        <input type="text" id="newName">
+                    </div>
+                    <button onclick="saveName()">保存</button>
+                    <button onclick="closeModal()">取消</button>
+                </div>
+                <!-- 广告商管理 -->
+                <div class="EditAdvertiser">
+                    @if (Model.Advertisertb.ad_name != null)
+                    {
+                        <div class="ad-line">
+                            当前身份：<span style="color: orange;font-weight:bold">广告商</span> &nbsp;
+                            广告商名称：<span style="color: orange; font-weight: bold">@Model.Advertisertb.ad_name</span> &nbsp;
+                            <button onclick="delAdvertiser()">注销广告商</button>
+                        </div>
+                        <div class="ad-line">
+                            <span>当前余额：@((Model.Advertisertb.balance ?? 0).ToString("F2")) 元</span> &nbsp;
+                            <button onclick="openPayMoney()">充值</button>
+                            <div id="payMoney" style="display: none">
+                                <div class="position">
+                                    <div class="advertiser-body">
+                                        <img src="~/Content/img/close.png" class="close-img" onclick="closePayDialog()" />
+                                        <div class="advertiser-main">
+                                            <!-- 广告管理的头部 -->
+                                            <div class="advertiser-header">
+                                                <span>充值确认</span>
+                                            </div>
+                                            <div class="advertiser-input-group">
+                                                <div class="input-pair" style="justify-content: center;">
+                                                    <span style="margin: auto 20px">广告商名：@Model.Advertisertb.ad_name</span>
+                                                    <span style="margin: auto 20px">余额：@((Model.Advertisertb.balance ?? 0).ToString("F2")) 元</span>
+                                                </div>
+                                                <div class="input-pair">
+                                                    <span style="margin: auto 20px">充值金额：</span>
+                                                    <input class="input-date" type="number" id="balance" name="balance" placeholder="请输入充值金额(元)" step="0.01" pattern="\d+(\.\d{1,2})?" title="最多允许两位小数">
+                                                </div>
+                                                <div class="input-pair">
+                                                    <span style="margin: auto 20px">交易类型：</span>
+                                                    <input type="radio" checked disabled> &nbsp;
+                                                    <span>充值</span>
+                                                </div>
+                                                <div class="input-pair">
+                                                    <span style="margin: auto 20px">交易方式：</span>
+                                                    <input type="radio" checked disabled> &nbsp;
+                                                    <span>支付宝</span>
+                                                </div>
+                                                <div class="input-pair">
+                                                    <span style="margin: auto 20px">交易状态：</span>
+                                                    <input type="radio" checked disabled> &nbsp;
+                                                    <span>未创建</span>
+                                                </div>
+                                                <!-- 提交按钮 -->
+                                                <div class="advertiser-submit">
+                                                    <a onclick="payMoney()">立即充值</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg"></div>
+                            </div>
+                        </div>
+                        <div class="ad-line">
+                            <span>
+                                当前广告状态：
+                                @(Model.Advertisertb.status == 0 ? "未审核" :
+                                    Model.Advertisertb.status == 1 ? "已审核" :
+                                    Model.Advertisertb.status == 2 ? "播放中" :
+                                    Model.Advertisertb.status == 3 ? "已结束" : "未发布"
+                                    )
+                            </span> &nbsp;
+                            <button class="advertiser-btn" onclick="showAdvertiserDialog()">广告管理</button>
+                        </div>
+                    }
+                    else
+                    {
+                        if (Model.Usertb.admin == 1)
+                        {
+                            <div class="ad-line">
+                                当前身份：<span style="color: orange;font-weight:bold">管理员</span> &nbsp;
+                                <button class="advertiser-btn" onclick="addAdvertiser()">申请成为广告商</button>
+                            </div>
+                        }
+                        else
+                        {
+                        <div class="ad-line">
+                            当前身份：<span style="color: orange;font-weight:bold">用户</span> &nbsp;
+                            <button class="advertiser-btn" onclick="addAdvertiser()">申请成为广告商</button>
+                        </div>
+                        }
+                    }
+                    <!-- 申请广告商名称模态框 -->
+                    <div id="addAdvertiserModal" style="display:none">
+                        <div class="modal-content">
+                            <label for="newName">广告商名称:</label>
+                            <input type="text" id="adName" placeholder="请输入广告商名称：">
+                        </div>
+                        <button onclick="saveAdvertiser()">保存</button>
+                        <button onclick="closeModal()">取消</button>
+                    </div>
+                    <!-- 广告管理弹窗 -->
+                    <div id="advertiserDialog" style="display: none">
+                        <div class="position">
+                            <div class="advertiser-body">
+                                <img src="~/Content/img/close.png" class="close-img" onclick="closeAdDialog()" />
+                                <div class="advertiser-main">
+                                    <!-- 广告管理的头部 -->
+                                    <div class="advertiser-header">
+                                        <span>广告管理</span>
+                                    </div>
+                                    <!-- 广告管理内容 -->
+                                    <div>
+                                        <!-- 广告内容输入区域 -->
+                                        <div class="advertiser-input">
+                                            <span style="margin: auto 20px">广告内容：</span>
+                                            <!-- tabindex用于按tab键时、会先锁定这个输入框；autocomplete用于提示浏览器不要自动填充 -->
+                                            <textarea class="input-content" type="text" id="adContent" placeholder="请输入广告内容(建议使用 html代码编写)" tabindex="1" autocomplete="off">@Model.Advertisertb.ad_content</textarea>
+                                        </div>
+                                        <!-- 广告展示时间输入区域 -->
+                                        <div class="advertiser-input-group">
+                                            <div class="input-pair">
+                                                <span style="margin: auto 20px">开始时间：</span>
+                                                <input class="input-date" type="datetime-local" id="startDate" name="startDate" value="@Model.Advertisertb.start_date.GetValueOrDefault().ToString("yyyy-MM-ddTHH:mm")">
+                                            </div>
+                                            <div class="input-pair">
+                                                <span style="margin: auto 20px">结束时间：</span>
+                                                <input class="input-date" type="datetime-local" id="endDate" name="endDate" value="@Model.Advertisertb.end_date.GetValueOrDefault().ToString("yyyy-MM-ddTHH:mm")">
+                                            </div>
+                                        </div>
+                                        <!-- 广告所需花费 -->
+                                        <div class="advertiser-input-group">
+                                            <div class="input-pair">
+                                                <span style="margin: auto 20px">所需费用：</span>
+                                                <input class="input-date" type="number" id="cost" name="cost" placeholder="费用自动生成(元)" step="0.01" pattern="\d+(\.\d{1,2})?" title="最多允许两位小数" disabled
+                                                        value="@Model.Advertisertb.cost">
+                                            </div>
+                                        </div>
+                                        <!-- 广告当前状态及支付状态 -->
+                                        <div class="advertiser-input-group">
+                                            <div class="input-pair">
+                                                <span style="margin: auto 20px">广告状态：</span>
+                                                <input type="radio" id="adStatus" name="adStatus" value="0" checked disabled> &nbsp;
+                                                @(Model.Advertisertb.status == 0 ? "未审核" :
+                                Model.Advertisertb.status == 1 ? "已审核" :
+                                Model.Advertisertb.status == 2 ? "播放中" :
+                                Model.Advertisertb.status == 3 ? "已结束" : "未发布"
+                                )
+                                            </div>
+                                            <div class="input-pair">
+                                                <span style="margin: auto 20px">支付状态：</span>
+                                                <input type="radio" id="payStatus" name="payStatus" value="0" checked disabled> &nbsp;
+                                                @(Model.Advertisertb.payment_status == 0 ? "未支付" :
+                                Model.Advertisertb.payment_status == 1 ? "已支付" : "未支付"
+                                )
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 提交按钮 -->
+                                    <div class="advertiser-submit">
+                                        <a onclick="saveAdvertiserInfo()">暂存内容</a>
+                                        <a onclick="submitAdvertiserInfo()">提交并支付</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg"></div>
+                    </div>
+                </div>
+                <!-- 账号注册时间 -->
+                <div class="user-regtime">注册时间：@Model.Usertb.regtime</div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!--JS脚本-->
+    <!--获取元素的脚本，需要在其他脚本前-->
+
+    <script>
+        var username = '@Model.Advertisertb.username';
+        // 打开修改密码模态框
+        function editPassword() {
+            closeModal();
+            document.getElementById('editPasswordModal').style.display = 'block';
+        }
+        // 打开修改名称模态框
+        function editName() {
+            closeModal();
+            document.getElementById('editNameModal').style.display = 'block';
+        }
+        // 打开申请广告模态框
+        function addAdvertiser() {
+            closeModal()
+            document.getElementById('addAdvertiserModal').style.display = 'block';
+        }
+        // 展示广告管理弹窗
+        function showAdvertiserDialog() {
+            closeModal()
+            if (username == null || username == '') {
+                alert("请先申请成为广告商！");
+                return false
+            }
+            document.getElementById('advertiserDialog').style.display = 'block';
+
+        }
+        // 打开充值弹窗
+        function openPayMoney() {
+            closeModal();
+            document.getElementById('payMoney').style.display = 'block';
+        }
+        // 修改密码
+        function savePassword() {
+            // 获取新密码的值
+            var newPassword = $("#newPassword").val();
+            var newCofPassword = $("#newCofPassword").val();
+            if (newPassword.length < 1) {
+                alert("密码不能为空！");
+                //阻止表单向后执行
+                return false;
+            }
+            // 密码长度为6-16位，必须包含字母和数字
+            if (!/^(?=.*[a-zA-Z])(?=.*\d).{6,16}$/.test(newPassword)) {
+                alert("密码格式不正确，长度为6-16位，必须包含字母和数字。");
+                // 阻止表单向后执行
+                return false;
+            }
+            if (newPassword != newCofPassword) {
+                alert("两次密码不一致");
+                return false;
+            }
+            // 发送新密码到后端控制器
+            $.ajax({
+                type: "POST",
+                url: "/FrontStage/SavePassword",
+                data: { newPassword: newPassword,username: '@Model.Usertb.username' },
+                success: function (result) {
+                    // 处理成功响应
+                    if (result.success) {
+                        alert(result.message);
+                    } else {
+                        alert("修改失败：" + result.message);
+                    }
+                },
+                error: function () {
+                    alert("修改失败：发生了一个错误");
+                }
+            });
+            // 关闭密码修改模态框
+            closeModal();
+        }
+        // 修改昵称
+        function saveName() {
+            // 获取新密码的值
+            var newName = $("#newName").val();
+            if (newName.length < 1) {
+                alert("昵称不能为空！");
+                //阻止表单向后执行
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "/FrontStage/SaveName",
+                data: { newName: newName,username: '@Model.Usertb.username' },
+                success: function (result) {
+                    // 处理成功响应
+                    if (result.success) {
+                        alert(result.message);
+                        location.reload(); // 刷新当前页面
+                    } else {
+                        alert("修改失败：" + result.message);
+                    }
+                },
+                error: function () {
+                    alert("修改失败：发生了一个错误");
+                }
+            });
+            // 关闭密码修改模态框
+            closeModal();
+        }
+        // 修改头像
+        function editIcon() {
+            var input = document.getElementById("imageInput");
+            var file = input.files[0];
+            if (file) {
+                // 检查文件大小，限制为500KB
+                if (file.size > 500 * 1024) {
+                    alert("请上传大小不超过500KB的头像文件。");
+                    return;
+                }
+                var formData = new FormData();
+                formData.append("file", file);
+                formData.append("username", "@Model.Usertb.username"); // 添加用户名字段
+                $.ajax({
+                    type: "POST",
+                    url: "/FrontStage/SaveIcon", // 替换为你的后端控制器的处理方法
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.success) {
+                            // 更新成功，更新页面上的头像
+                            alert("头像更新成功！");
+                            location.reload(); // 刷新当前页面
+                        } else {
+                            alert("头像更新失败：" + result.message);
+                        }
+                    },
+                    error: function () {
+                        alert("头像更新失败：图片大小不得大于500KB");
+                    }
+                });
+
+            }
+        }
+        // 申请成为广告商
+        function saveAdvertiser() {
+            var newAdvertiser = $("#adName").val();
+            if (newAdvertiser.length < 1) {
+                alert("广告商名称不能为空！");
+                //阻止表单向后执行
+                return false;
+            }
+             // 发送新密码到后端控制器
+            $.ajax({
+                type: "POST",
+                url: "/FrontStage/SaveAdvertiser",
+                data: { adName: newAdvertiser,username: '@Model.Usertb.username' },
+                success: function (result) {
+                    // 处理成功响应
+                    if (result.success) {
+                        alert(result.message);
+                        location.reload(); // 刷新当前页面
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert("修改失败：发生了一个错误");
+                }
+            });
+        }
+        // 关闭所有模态框
+        function closeModal() {
+            document.getElementById('editPasswordModal').style.display = 'none';
+            document.getElementById('editNameModal').style.display = 'none';
+            document.getElementById('addAdvertiserModal').style.display = 'none';
+        }
+        // 关闭广告弹窗
+        function closeAdDialog() {
+            closeModal()
+            document.getElementById('advertiserDialog').style.display = 'none';
+        }
+        // 关闭充值弹窗
+        function closePayDialog() {
+            closeModal()
+            document.getElementById('payMoney').style.display = 'none';
+        }
+        // 获取用户id和下拉框的位置
+        var userId = document.getElementById('user-id');
+        var dropdown = document.getElementById('dropdown');
+        var TempDataNotice = '@TempData["notice"]';
+        var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <!-- 广告管理脚本 -->
+    <script>
+        // 充值功能
+        function payMoney() {
+            var money = document.getElementById('balance').value;
+            // 检查金额是否为空、是否是数字以及是否大于0
+            if (money === "" || isNaN(money) || Number(money) <= 0) {
+                alert('请输入有效的充值金额！');
+                return false;
+            }
+            var dataObj = {
+                "Username":"@Model.Advertisertb.username",
+                "AdName": "@Model.Advertisertb.ad_name",
+                "Money": money,
+                "Type": "充值"
+            };
+            $.ajax({
+                cache: false,
+                type: "Post",
+                data: { "Order": dataObj},
+                url: "/FrontStage/PayMoney",
+                success: function (data) {
+                    console.log(data);
+                    //跳转支付宝沙箱扫码的页面
+                    window.location.replace(data.pay_url);
+
+                },
+                error: function (data) {
+                    console.log(data)
+                    alert('失败!');
+                }
+
+            })
+        }
+        // 注销广告商
+        function delAdvertiser() {
+            var isConfirmed = window.confirm('确认注销广告商吗(一旦注销，广告信息及余额将清空)？');
+            if (isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "/FrontStage/DelAdvertiserInfo",
+                    data: { username: '@Model.Usertb.username' },
+                success: function (result) {
+                    // 处理成功响应
+                    if (result.success) {
+                        alert(result.message);
+                        location.reload(); // 刷新当前页面
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert("修改失败：发生了一个错误");
+                }
+                });
+            }
+        }
+        // 暂存广告管理信息(未支付)
+        function saveAdvertiserInfo() {
+            var adContent = document.getElementById('adContent').value;
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var costInput = document.getElementById('cost').value;
+            if (adContent.length === 0 || startDate.length === 0 || endDate.length === 0) {
+                alert("广告内容、开始时间、结束时间不能为空！");
+                //阻止表单向后执行
+                return false;
+            }
+            // 将开始时间和结束时间的字符串值转换为Date对象
+            var start = new Date(startDate);
+            var end = new Date(endDate);
+
+            // 比较日期以确保结束时间晚于开始时间
+            if (end <= start) {
+                alert("结束时间必须大于开始时间！");
+                return false;
+            }
+            var isConfirmed = window.confirm('确认暂存该内容吗(一旦暂存，需重新支付)？');
+            if (isConfirmed) {
+                $.ajax({
+                type: "POST",
+                url: "/FrontStage/SaveAdvertiserInfo",
+                // 使用json格式，防止解析html代码出错
+                contentType: "application/json",
+                 data: JSON.stringify({
+                        username: '@Model.Usertb.username',
+                        adContent: adContent,
+                        startDate: startDate,
+                        endDate: endDate,
+                        cost: costInput
+                    }),
+                success: function (result) {
+                    // 处理成功响应
+                    if (result.success) {
+                        alert(result.message);
+                        location.reload(); // 刷新当前页面
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert("修改失败：发生了一个错误");
+                }
+                });
+                document.getElementById('advertiserDialog').style.display = 'none';
+            }
+
+        }
+        // 提交广告管理信息(已支付)
+        function submitAdvertiserInfo() {
+            var adContent = document.getElementById('adContent').value;
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var costInput = document.getElementById('cost').value;
+            if (adContent.length === 0 || startDate.length === 0 || endDate.length === 0) {
+                alert("广告内容、开始时间、结束时间不能为空！");
+                //阻止表单向后执行
+                return false;
+            }
+            // 将开始时间和结束时间的字符串值转换为Date对象
+            var start = new Date(startDate);
+            var end = new Date(endDate);
+
+            // 比较日期以确保结束时间晚于开始时间
+            if (end <= start) {
+                alert("结束时间必须大于开始时间！");
+                return false;
+            }
+            var isConfirmed = window.confirm('确认支付 ' + costInput + '元 吗？');
+            if (isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "/FrontStage/SubmitAdvertiserInfo",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        username: '@Model.Usertb.username',
+                        adContent: adContent,
+                        startDate: startDate,
+                        endDate: endDate,
+                        cost: costInput
+                    }),
+                    success: function (result) {
+                        // 处理成功响应
+                        if (result.success) {
+                            alert(result.message);
+                            location.reload(); // 刷新当前页面
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: function () {
+                        alert("提交失败：发生了一个错误");
+                    }
+                });
+
+            }
+            return false
+        }
+        // 计算cost
+        document.addEventListener('DOMContentLoaded', function () {
+            // 获取输入元素
+            var adContent = document.getElementById('adContent');
+            var startDate = document.getElementById('startDate');
+            var endDate = document.getElementById('endDate');
+            var costInput = document.getElementById('cost');
+
+            // 计算费用的函数
+            function calculateCost() {
+                // 计算广告内容字数
+                var contentLength = adContent.value.length;
+
+                // 计算开始时间和结束时间之间的差值（以小时为单位）
+                var start = new Date(startDate.value);
+                var end = new Date(endDate.value);
+                var timeDiff = Math.abs(end - start) / 36e5; // 将毫秒转换为小时
+
+                // 计算字数费用（每100字500元）
+                var wordCost = Math.ceil(contentLength / 100) * 500; // 使用Math.ceil确保即使不足100字也按100字计费
+
+                // 计算时间费用（每小时10元）
+                var timeCost = timeDiff * 5;
+
+                // 计算总费用
+                var totalCost = wordCost + timeCost;
+
+                // 更新所需费用输入框的值
+                costInput.value = totalCost.toFixed(2); // 保留两位小数
+            }
+
+            // 绑定事件监听器
+            adContent.addEventListener('input', calculateCost);
+            startDate.addEventListener('change', calculateCost);
+            endDate.addEventListener('change', calculateCost);
+        });
+
+    </script>
+
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <script src="~/Content/js/frontstage.js"></script>
+
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

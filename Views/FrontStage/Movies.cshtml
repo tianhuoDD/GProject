@@ -1,0 +1,226 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/video.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+</head>
+<body style="background-color: black !important;">
+    <div id="header">
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <div id="title">
+            <ul>
+                <li><a href="/FrontStage/Index">首页</a></li>
+                <li><a href="/FrontStage/Movies" style="border-bottom: 3px solid rgb(255, 255, 0)">电影</a></li>
+                <li><a href="/FrontStage/Episodes">电视剧</a></li>
+                <li><a href="/FrontStage/Variety">综艺</a></li>
+                <li><a href="/FrontStage/Anime">动漫</a></li>
+                <li><a href="/FrontStage/Documentary">纪录片</a></li>
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            <a id="user-id"></a>
+            <div id="dropdown" style="display: none;">
+                <a onclick="openProfile()">个人中心</a>
+                <a onclick="openAdmin()">后台管理</a>
+            </div>
+        </p>
+        <!--登录、注销按钮显示-->
+        <div id="login">
+            <!-- 如果已登录，则显示用户名和注销按钮 -->
+            <a href="/LoginReg/Login" id="logout">注销</a>
+            <!-- 如果未登录，则显示登录按钮 -->
+            <a href="/LoginReg/Login" id="login-btn">登录</a>
+        </div>
+    </div>
+    <main class="container">
+        <!--分类-->
+        <section>
+            <div class="choose" style="box-sizing: border-box;">
+                <ul><li class="choose-title">选电影</li></ul>
+                <!--按类型-->
+                <ul>
+                    <li><span>按剧情：</span></li>
+                    <!--当进入此页面时，默认选择“全部”。如果在后续点击“全部”，则也显示-->
+                    <li><a class="@(string.IsNullOrEmpty(ViewBag.genre) || ViewBag.genre == "全部" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "全部" ,page = 1, region = ViewBag.region, year = ViewBag.year, sort=ViewBag.sort})">全部</a></li>
+                    <li><a class="@(ViewBag.genre == "喜剧" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "喜剧" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">喜剧</a></li>
+                    <li><a class="@(ViewBag.genre == "犯罪" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "犯罪" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">犯罪</a></li>
+                    <li><a class="@(ViewBag.genre == "悬疑" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "悬疑" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">悬疑</a></li>
+                    <li><a class="@(ViewBag.genre == "功夫" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "功夫" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">功夫</a></li>
+                    <li><a class="@(ViewBag.genre == "爱情" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "爱情" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">爱情</a></li>
+                    <li><a class="@(ViewBag.genre == "动作" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "动作" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">动作</a></li>
+                    <li><a class="@(ViewBag.genre == "奇幻" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "奇幻" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">奇幻</a></li>
+                    <li><a class="@(ViewBag.genre == "科幻" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "科幻" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">科幻</a></li>
+                    <li><a class="@(ViewBag.genre == "青春" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "青春" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">青春</a></li>
+                    <li><a class="@(ViewBag.genre == "动画" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "动画" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">动画</a></li>
+                    <li><a class="@(ViewBag.genre == "惊悚" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "惊悚" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">惊悚</a></li>
+                    <li><a class="@(ViewBag.genre == "荒诞" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "荒诞" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">荒诞</a></li>
+                    <li><a class="@(ViewBag.genre == "恐怖" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "恐怖" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">恐怖</a></li>
+                    <li><a class="@(ViewBag.genre == "枪战" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "枪战" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">枪战</a></li>
+                    <li><a class="@(ViewBag.genre == "魔幻" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "魔幻" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">魔幻</a></li>
+                    <!--通过空白占位符实现标签排布-->
+                    <li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+                    <li><a class="@(ViewBag.genre == "武侠" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "武侠" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">武侠</a></li>
+                    <li><a class="@(ViewBag.genre == "战争" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "战争" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">战争</a></li>
+                    <li><a class="@(ViewBag.genre == "纯爱" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "纯爱" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">纯爱</a></li>
+                    <li><a class="@(ViewBag.genre == "灾难" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "灾难" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">灾难</a></li>
+                    <li><a class="@(ViewBag.genre == "家庭" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "家庭" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">家庭</a></li>
+                    <li><a class="@(ViewBag.genre == "院线" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "院线" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">院线</a></li>
+                    <li><a class="@(ViewBag.genre == "网络电影" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "网络电影" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">网络电影</a></li>
+                    <li><a class="@(ViewBag.genre == "其他" ? "selected" : "")" href="@Url.Action("Movies",new { genre = "其他" ,page = 1, region = ViewBag.region, year = ViewBag.year , sort=ViewBag.sort})">其他</a></li>
+                </ul>
+                <!--按地区-->
+                <ul>
+                    <li><span>按地区：</span></li>
+                    <li><a class="@(string.IsNullOrEmpty(ViewBag.region) || ViewBag.region == "全部" ? "selected" : "")" href="@Url.Action("Movies",new { region = "全部",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">全部</a></li>
+                    <li><a class="@(ViewBag.region == "华语" ? "selected" : "")" href="@Url.Action("Movies",new { region = "华语",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">华语</a></li>
+                    <li><a class="@(ViewBag.region == "香港地区" ? "selected" : "")" href="@Url.Action("Movies",new { region = "香港地区",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">香港地区</a></li>
+                    <li><a class="@(ViewBag.region == "美国" ? "selected" : "")" href="@Url.Action("Movies",new { region = "美国",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">美国</a></li>
+                    <li><a class="@(ViewBag.region == "日本" ? "selected" : "")" href="@Url.Action("Movies",new { region = "日本",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">日本</a></li>
+                    <li><a class="@(ViewBag.region == "韩国" ? "selected" : "")" href="@Url.Action("Movies",new { region = "韩国",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">韩国</a></li>
+                    <li><a class="@(ViewBag.region == "泰国" ? "selected" : "")" href="@Url.Action("Movies",new { region = "泰国",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">泰国</a></li>
+                    <li><a class="@(ViewBag.region == "欧洲" ? "selected" : "")" href="@Url.Action("Movies",new { region = "欧洲",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">欧洲</a></li>
+                    <li><a class="@(ViewBag.region == "日语" ? "selected" : "")" href="@Url.Action("Movies",new { region = "日语",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">日语</a></li>
+                    <li><a class="@(ViewBag.region == "英语" ? "selected" : "")" href="@Url.Action("Movies",new { region = "英语",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">英语</a></li>
+                    <li><a class="@(ViewBag.region == "韩语" ? "selected" : "")" href="@Url.Action("Movies",new { region = "韩语",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">韩语</a></li>
+                    <li><a class="@(ViewBag.region == "法语" ? "selected" : "")" href="@Url.Action("Movies",new { region = "法语",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">法语</a></li>
+                    <li><a class="@(ViewBag.region == "粤语" ? "selected" : "")" href="@Url.Action("Movies",new { region = "粤语",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">粤语</a></li>
+                    <li><a class="@(ViewBag.region == "其他" ? "selected" : "")" href="@Url.Action("Movies",new { region = "其他",page = 1, genre = ViewBag.genre, year = ViewBag.year, sort=ViewBag.sort})">其他</a></li>
+                </ul>
+                <!--按年份-->
+                <ul>
+                    <li><span>按年份：</span></li>
+                    <li><a class="@(string.IsNullOrEmpty(ViewBag.year) || ViewBag.year == "全部" ? "selected" : "")" href="@Url.Action("Movies",new { year = "全部",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">全部</a></li>
+                    <li><a class="@(ViewBag.year == "2023" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2023",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2023</a></li>
+                    <li><a class="@(ViewBag.year == "2022" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2022",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2022</a></li>
+                    <li><a class="@(ViewBag.year == "2021" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2021",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2021</a></li>
+                    <li><a class="@(ViewBag.year == "2020" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2020",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2020</a></li>
+                    <li><a class="@(ViewBag.year == "2019" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2019",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2019</a></li>
+                    <li><a class="@(ViewBag.year == "2018" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2018",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2018</a></li>
+                    <li><a class="@(ViewBag.year == "2017" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2017",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2017</a></li>
+                    <li><a class="@(ViewBag.year == "2016" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2016",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2016</a></li>
+                    <li><a class="@(ViewBag.year == "2015" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2015",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2015</a></li>
+                    <li><a class="@(ViewBag.year == "2014" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2014",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2014</a></li>
+                    <li><a class="@(ViewBag.year == "2013" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2013",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2013</a></li>
+                    <li><a class="@(ViewBag.year == "2012" ? "selected" : "")" href="@Url.Action("Movies",new { year = "2012",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">2012</a></li>
+                    <li><a class="@(ViewBag.year == "其他" ? "selected" : "")" href="@Url.Action("Movies",new { year = "其他",page = 1, genre = ViewBag.genre, region = ViewBag.region, sort=ViewBag.sort})">其他</a></li>
+                </ul>
+                <!--按排序-->
+                <ul>
+                    <li><span>按排序：</span></li>
+                    <li><a class="@(ViewBag.sort == "时间" ? "selected" : "")" href="@Url.Action("Movies",new { sort="时间",page = 1, genre = ViewBag.genre, region = ViewBag.region,year = ViewBag.year})">时间排序</a></li>
+                    <li><a class="@(ViewBag.sort == "热度" ? "selected" : "")" href="@Url.Action("Movies",new { sort="热度",page = 1, genre = ViewBag.genre, region = ViewBag.region,year = ViewBag.year})">热度排序</a></li>
+                    <li><a class="@(ViewBag.sort == "评分" ? "selected" : "")" href="@Url.Action("Movies",new { sort="评分",page = 1, genre = ViewBag.genre, region = ViewBag.region,year = ViewBag.year})">评分排序</a></li>
+                </ul>
+            </div>
+        </section>
+        <!--信息-->
+        <section>
+            <ul class="video">
+                @foreach (var video in Model)
+                {
+                    <li>
+                        <!--缩略图-->
+                        <div class="video-item">
+                            <a href="/VideoDetails/Details?tvid=@video.tvid" title="@video.title">
+                                <div class="video-thumb">
+                                    <!--盗链 Prompt4-->
+                                    <img class="video-thumb" src="@video.cover" referrerPolicy="no-referrer">
+                                    <!--评分为0时不显示-->
+                                    @if (video.rating != 0)
+                                    {
+                                        <!--确保显示一位小数-->
+                                        <span class="pic-tag-top">@String.Format("{0:F1}", video.rating)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="pic-text-right">@video.status</span>
+                                    }
+                                    
+                                </div>
+                            </a>
+                            <div class="video-title">
+                                <a href="/VideoDetails/Details?tvid=@video.tvid" title="@video.title">@video.title</a>
+                            </div>
+                        </div>
+                        <!-- 大封面图片 -->
+                        <div class="video-mask hidden">
+                            <div class="img-warp">
+                                <img src="@video.bigcover" referrerPolicy="no-referrer">
+                                <!--评分为0时不显示-->
+                                @if (video.rating != 0)
+                                {
+                                    <!--确保显示一位小数-->
+                                    <span class="pic-tag-top2">@String.Format("{0:F1}", video.rating)</span>
+                                }
+                                else
+                                {
+                                    <span class="pic-text-right2">@video.status</span>
+                                }
+                            </div>
+                            <div class="content">
+                                <span title="@video.title" class="content-title">@video.title</span>
+                                <!--前端处理标签分割，比较消耗性能-->
+                                <div class="tags">
+                                    @{
+                                        string[] tags = video.tag.Split(';');
+                                        int tagCount = 0;
+                                        foreach (var tag in tags)
+                                        {
+                                            if (tagCount >= 4)
+                                            {
+                                                break;
+                                            }
+
+                                            <span title="@video.tag" class="tag">@tag</span>
+
+                                            tagCount++;
+                                        }
+                                    }
+                                </div>
+                                <span title="@video.actor" class="actor">@video.actor</span>
+                                <div class="desc" title="@video.desc">
+                                    @video.desc
+                                </div>
+                                <button class="play-btn" onclick="window.location.href='/VideoDetails/Details?tvid=@video.tvid'">
+                                    <img class="play-icon" src="~/Content/img/play.svg">
+                                    立即播放
+                                </button> 
+                            </div>
+                        </div>   
+                    </li>
+                }
+
+            </ul>
+        </section>
+        <!--切换下一页-->
+        <section>
+            <div>
+                <!-- 分页控件 -->
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Movies", new { page, genre = ViewBag.genre, region = ViewBag.region, year = ViewBag.year ,sort=ViewBag.sort}))
+            </div>
+        </section>
+    </main>
+    <!--JS脚本-->
+    <!--获取元素的脚本，需要在其他脚本前-->
+    <script>
+        // 获取用户id和下拉框的位置
+        var userId = document.getElementById('user-id');
+        var dropdown = document.getElementById('dropdown');
+        var TempDataNotice = '@TempData["notice"]';
+        var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <script src="~/Content/js/frontstage.js"></script>
+
+</body>
+</html>

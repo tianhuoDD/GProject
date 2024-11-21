@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--网页编码-->
+    <meta charset="utf-8">
+    <!--响应式网页实现-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的网络数据采集</title>
+    <link rel="stylesheet" href="~/Content/css/backstage.css">
+    <link rel="stylesheet" href="~/Content/css/styles.css">
+</head>
+<body style="background-color: #EFEFEF !important" class="hidden">
+    <div id="header">
+        <div>
+            <img src="~/Content/img/logo.png" id="logo" alt="爬虫">
+        </div>
+        <div id="title">
+            <ul>
+                <li><a href="/BackStage/UserMan" style="border-bottom: 3px solid rgb(255, 255, 0)">后台管理</a></li>
+            </ul>
+        </div>
+        <!--用户名展示-->
+        <p id="user-show">
+            欢迎，
+            <a id="user-id"></a>
+        </p>
+        <!--登出按钮-->
+        <div id="logout">
+            <a href="/LoginReg/Login">退出登录</a>
+        </div>
+    </div>
+    <main class="main-container">
+        <!-- 左侧栏 -->
+        <div class="main-left">
+            <ul>
+                <li><a href="/BackStage/VideoMan" class="sidebar-link">视频管理</a></li>
+                <li><a href="/BackStage/UserMan" class="sidebar-link">用户管理</a></li>
+                <li><a href="/BackStage/CommentMan" class="sidebar-link" style="background-color: rgb(178, 178, 179);">评论管理</a></li>
+                <li><a href="/BackStage/AdvertiserMan" class="sidebar-link">广告管理</a></li>
+                <li><a href="/BackStage/OrderMan" class="sidebar-link">账单管理</a></li>
+                <li><a href="/FrontStage/Index" class="sidebar-link">返回首页</a></li>
+            </ul>
+        </div>
+        <div class="main-right">
+            <!-- 搜索栏 -->
+            <div class="backsearch ">
+                <form action="/Search/SearchComment" method="get">
+                    <div class="backsearch-bar">
+                        <input type="text" name="searchTerm" placeholder="用户名丨关键字" value="@ViewBag.SearchTerm" >
+                        <button type="submit">查询</button>
+                        <button type="button" id="addButtonComment">添加</button>
+                    </div>
+                </form>
+            </div>
+            <!--添加评论-->
+            <div class="list">
+                <form method="post" id="addComment" onsubmit="return checkFormAddComment()" action="/Add/AddComment">
+                    <table class="table form-group">
+                        <tr>
+                            <th>选择</th>
+                            <th>评论ID</th>
+                            <th>用户名</th>
+                            <th>内容</th>
+                            <th>评论时间</th>
+                            <th>唯一标识</th>
+                            <th>审核状态</th>
+                            <th>其他</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="submit" class="btn save-btn">添加</button>
+                                <button type="button" class="btn cancel-btn" onclick="return clearFormAddComment()">清空</button>
+                            </td>
+                            <td><label for="comID"><input type="text" id="comID" name="comID" placeholder="请输入评论ID"></label></td>
+                            <td><label for="username"><input type="text" id="username" name="username" placeholder="请输入用户名"></label></td>
+                            <td><label for="content"><textarea id="content" name="content" placeholder="请输入评论内容"></textarea></label></td>
+                            <td><label for="comtime"><input type="datetime-local" id="comtime" name="comtime"></label></td>
+                            <td><label for="tvid"><input type="text" id="tvid" name="tvid" placeholder="请输入唯一标识"></label></td>
+                            <td>
+                                <label for="ifStatus" class="ifStatus">
+                                    <input type="radio" id="ifStatus1" name="ifStatus" value="1"> 通过
+                                </label>
+                                <label for="ifStatus" class="ifStatus">
+                                    <input type="radio" id="ifStatus0" name="ifStatus" value="0"> 不通过
+                                </label>
+                            </td>
+                            <td><a href="/BackStage/CommentMan">返回</a></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!--JS脚本-->
+    <script>
+        //在 Razor 视图中传递 TempData 的值给 backstage.js
+        var TempDataNotice = '@TempData["notice"]';
+        var ViewBagNotice = '@ViewBag.notice';
+    </script>
+    <!--js脚本引用-->
+    <script src="~/Content/js/jquery-3.4.1.min.js"></script>
+    <!--包含‘TempData提示’、‘ViewBag提示’、‘清空表单’、‘检查空信息’、‘用户名记录’、‘登出按钮’、‘删除用户’-->
+    <script src="~/Content/js/backstage.js"></script>
+    <script src="~/Content/js/comman.js"></script>
+
+    <!--页脚-->
+    <footer id="footer">
+        <div class="footer-info">
+            <p>&copy; 2023 12580资源网 </p>
+            <p>联系方式: 2434260208@qq.com</p>
+        </div>
+    </footer>
+</body>
+</html>

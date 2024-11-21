@@ -1,0 +1,209 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+}
+.hidden {
+    display: none !important;
+}
+.prompt{
+    color: red;
+    font-size: small;
+}
+/*左侧边栏*/
+.main-container {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 80px);/* 使页脚在最底部 */
+}
+
+.main-left {
+    min-width: 13%;
+    width: 13%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.main-left ul {
+    list-style-type: none;
+    padding: 0;
+    border: 1px solid #333366;
+    border-radius: 5px;
+}
+
+.main-left ul li {
+    text-align: center;
+    margin-bottom: 10px;
+    height: 45px;
+    line-height: 45px;
+}
+
+.sidebar-link {
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 5px 0 5px 0;
+    transition: background-color 0.1s;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.sidebar-link:hover {
+    background-color: rgb(141, 141, 143);
+}
+
+.main-right {
+    flex: 1;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+
+
+/* 搜索栏 */
+.backsearch {
+    width: 80%;
+    max-width: 600px;
+    overflow: hidden; /* 防止子元素溢出 */
+}
+
+.backsearch-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.backsearch-bar input[type="text"] {
+    flex: 1; /* 填充剩余空间 */
+    width: 0; /* 必须设置为0，否则flex-grow会失效 */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    font-size: 16px;
+    color: #333;
+}
+
+.backsearch-bar input[type="text"]::placeholder {
+    color: #888;
+}
+
+.backsearch-bar button {
+    margin-left: 5px;
+    padding: 10px 15px;
+    background-color: #4285f4;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: 1px;
+    transition: background-color 0.3s;
+}
+
+.backsearch-bar button:hover {
+    background-color: #3366cc;
+}
+
+/* 主要内容 */
+.list {
+    margin-top: 40px;
+    width: 90%;
+}
+
+.table {
+    border-collapse: collapse; /*边框合并*/
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #7d7d7d;
+    padding: 8px;
+    text-align: center;
+    max-width: 160px;
+    overflow: hidden; /*溢出隐藏，可滑动*/
+    white-space: nowrap;
+}
+/* 隐藏滚动条 (伪元素选择器，用于选择th和td元素的滚动条) */
+th::-webkit-scrollbar, td::-webkit-scrollbar {
+    display: none; /* 隐藏滚动条 */
+}
+
+th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+/*对偶数行的表格行设置了背景颜色，以增加表格的可读性。*/
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+
+
+/* 更新视频加载页面 */
+/* 加载动画背景 */
+.modal {
+    display: none; 
+    position: fixed; /* 固定定位，使其脱离文档流并固定在屏幕上 */
+    z-index: 1; /* z-index属性设置堆叠顺序，1确保它在页面上的其他元素之上 */
+    left: 0; 
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: auto; /* 如果内容超出，则允许滚动 */
+    background-color: rgb(0,0,0); /* 背景颜色为黑色，不透明 */
+    background-color: rgba(0,0,0,0.4); /* 背景颜色为半透明黑色，增加了透明度 */
+    padding-top: 60px; /* 从顶部开始的内边距，为了在顶部留出一些空间 */
+}
+
+/* 加载器本身 */
+.loader {
+    border: 16px solid #f3f3f3; /* 边框为浅灰色，表示加载器的轨迹 */
+    border-top: 16px solid sandybrown; /* 上边框为蓝色，表示加载器的颜色 */
+    border-radius: 50%; /* 边框的半径为50%，使其成为一个圆形 */
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite; /* 应用旋转动画，每次持续2秒，速度相同（linear），无限循环（infinite） */
+    margin: auto; /* 自动外边距，使加载器水平垂直居中 */
+}
+
+/* 动画效果 */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg); /* 动画开始时，旋转角度为0度 */
+    }
+
+    100% {
+        transform: rotate(360deg); /* 动画结束时，旋转角度为360度，形成一个完整的圆周旋转 */
+    }
+}
+/* 自定义的信息文本样式 */
+.info-text {
+    color: sandybrown; /* 设置文字颜色为亮红色 */
+    font-size: 1.5em; /* 设置文字大小 */
+    text-align: center; /* 让文本居中 */
+    font-weight: bold; /* 文本加粗 */
+    margin: 20px auto; /* 在元素的顶部增加一些空间 */
+    width: 500px;
+    font-family: 'Arial', sans-serif; /* 设置字体 */
+    animation: fadeIn 2s; /* 使用淡入效果 */
+    border: 3px solid sandybrown; /* 添加亮红色边框 */
+    padding: 10px; /* 在文本周围增加一些填充 */
+    border-radius: 5px; /* 边框圆角效果 */
+    background-color: #fdfdfd; /* 轻微的背景颜色 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加轻微的阴影效果 */
+}
+
+/* 淡入动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+

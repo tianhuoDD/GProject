@@ -1,0 +1,368 @@
+/* 大封面 */
+.hidden {
+    visibility: hidden;
+}
+/* 放大的内容 */
+.video-mask {
+    position: relative; /* 设置相对定位，使得后续的绝对定位相对于其定位 */
+    z-index: 998; /* 设置层级，确保遮罩在其他元素之上 */
+    /* 美化 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* 添加轻微的阴影效果 */
+    opacity: 0; /* 初始时设置透明度为0，隐藏遮罩 */
+    transition: opacity 0.3s ease-in-out; /* 添加过渡效果，使透明度变化平滑 */
+}
+
+    .video-mask:not(.hidden) {
+        opacity: 1; /* 当没有被隐藏时，透明度为1，显示遮罩 */
+    }
+
+.item:hover .video-mask {
+    transform: scale(1.1); /* 在悬停时微微放大遮罩 */
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0; /* 动画开始时完全透明 */
+        transform: scale(0.9); /* 动画开始时稍微缩小 */
+    }
+
+    100% {
+        opacity: 1; /* 动画结束时完全不透明 */
+        transform: scale(1); /* 动画结束时恢复原始大小 */
+    }
+}
+/* 具体信息 */
+.img-warp {
+    border-radius: 10px;
+}
+    .img-warp img {
+        width: 240px;
+        height: 150px;
+        position: absolute;
+        left: -10px;
+        top: -365px;
+        pointer-events: none;
+        border-radius: 10px 10px 0 0;
+    }
+.content {
+    background-color: #2f3138;
+    border-radius: 0 0 10px 10px;
+    position: absolute;
+    width: 220px;
+    height: 200px;
+    top: -220px;
+    left: -10px;
+    color: hsla(0,0%,100%,.5);
+    padding: 10px;
+}
+.content-title{
+    color: hsla(0,0%,100%,.9);
+    padding: 5px;
+    font-size: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    width: 200px;
+}
+.tags{
+    height: 20px;
+    overflow: hidden;
+}
+.tag{
+    background-color: hsla(0,0%,100%,.06);
+    border-radius: 2px;
+    font-size:13px;
+    padding:0.1px 5px;
+    margin: 2px;
+}
+.actor{
+    font-size:14px;
+    margin: 2px;
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.desc {
+    position: absolute;
+    top: 90px;
+    left: 10px;
+    right: 10px;
+    font-size: 13px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
+.play-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background: #FF9900;
+    color: #fff;
+    font-size: 14px;
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: 140px;
+    cursor: pointer;
+}
+
+.play-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+    fill: #fff;
+}
+
+/* 筛选 */
+.choose {
+    display: block;
+    padding: 20px;
+    line-height: 4;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.choose-title {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 0;
+    margin: 0;
+}
+
+.choose ul {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    /* 移除滚动条属性 */
+    line-height: 2.8;
+}
+
+    .choose ul li {
+        display: inline-block;
+        margin-right: 10px;
+        /* 添加以下属性以允许换行 */
+        white-space: normal;
+        vertical-align: top; /* 保持行内块元素顶部对齐 */
+    }
+
+        .choose ul li span {
+            font-weight: bold;
+            color: #fff;
+            font-size: 1.1em;
+        }
+
+        .choose ul li a {
+            text-decoration: none;
+            color: #ddd;
+            transition: color 0.3s ease;
+            font-size: 1em;
+        }
+
+            .choose ul li a:hover {
+                color: yellow;
+            }
+
+
+/* :hover为当鼠标悬停在链接时元素的样式 */
+.choose ul li a:hover {
+    color: yellow;
+}
+/* 选择标签时显示 */
+.selected {
+    color: yellow !important;
+    border-bottom: 3px solid rgb(255, 255, 0); /* 黄色下划线表示选中状态 */
+}
+
+/* 电影列表样式 */
+.video {
+    list-style: none;  /* 移除列表样式 */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;  /* 设置换行方式为换行 */
+}
+
+.video li{
+    padding: 5px;
+    
+}
+/* 单个电影项样式 */
+.video-item {
+    margin: 10px;  /* 每个电影的间距 */
+    border-radius: 5px;
+    overflow: hidden;  /* 隐藏溢出内容 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+}
+
+/* 电影缩略图样式 */
+.video-thumb {
+    height: 300px;
+    width: 200px;
+    background-color: #333;
+    background-size: cover;  /* 使图片等比例缩放 */
+    background-position: center;
+    position: relative; /* 添加相对定位，用于定位.pic */
+}
+.pic-tag-top {
+    position: absolute;
+    top: 0px; /* 可以调整这个值，以便标签不会贴紧边缘 */
+    right: 0px; /* 同上，调整以避免贴紧边缘 */
+    z-index: 99; /* 设置层级，确保此元素出现在最上方 */
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 0 0 0 8px;
+    background-color: #F90;
+    color: #FFF;
+}
+.pic-tag-top2 {
+    position: absolute;
+    top: -240px; /* 可以调整这个值，以便标签不会贴紧边缘 */
+    right: -10px; /* 同上，调整以避免贴紧边缘 */
+    z-index: 99; /* 设置层级，确保此元素出现在最上方 */
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 8px 0 0 0;
+    color: #F90;
+    font-size: 14px;
+    font-weight: 700; /* 字体加粗 */
+}
+.pic-text-right {
+    display: block;
+    width: 100%;
+    position: absolute; /* 绝对定位 */
+    bottom: 0; /* 距离底部距离 */
+    right: 0; /* 距离左侧距离 */
+    padding: 5px 10px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 溢出时显示省略号 */
+    white-space: nowrap; /* 不换行 */
+    background-repeat: no-repeat; /* 防止背景重复 */
+    background-image: linear-gradient(transparent,rgba(0,0,0,.5)); /* 添加渐变背景 */
+    color: #FFF;
+    text-align: right; /* 文本右对齐 */
+}
+.pic-text-right2 {
+    display: block;
+    width: 100%;
+    position: absolute; /* 绝对定位 */
+    bottom: 0; /* 距离底部距离 */
+    top: -240px;
+    right: -10px;
+    padding: 5px 10px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 溢出时显示省略号 */
+    white-space: nowrap; /* 不换行 */
+    background-repeat: no-repeat; /* 防止背景重复 */
+    background-image: linear-gradient(transparent,rgba(0,0,0,.5)); /* 添加渐变背景 */
+    color: #FFF;
+    text-align: right; /* 文本右对齐 */
+}
+.video-title{
+    padding: 10px;
+    text-align: center;
+}
+
+.video-title a {
+    display: block; /* 使链接表现为块级元素，以便可以应用宽度和溢出样式 */
+    width: 100%; /* 设置宽度为父容器的100% */
+    overflow: hidden; /* 隐藏溢出的内容 */
+    text-overflow: ellipsis; /* 当文本溢出时显示省略号 */
+    white-space: nowrap; /* 确保文本在一行内显示并不会换行 */
+    color: white;
+    text-decoration: none; /* 移除链接下划线 */
+    transition: color 0.3s ease; /* 添加颜色过渡效果 */
+    font-weight: normal;
+}
+
+
+.video-title a:hover {
+    color: yellow;
+}
+
+/* 分页控件的容器 */
+.pagination-container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* 分页控件 */
+.pagination {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    justify-content: center; /* 居中显示 */
+}
+
+    /* 分页控件内的每个项目 */
+    .pagination > li {
+        margin: 0 5px; /* 两边的间距 */
+    }
+
+        /* 分页控件内的链接 */
+        .pagination > li > a,
+        .pagination > li > span {
+            text-decoration: none;
+            color: white; /* 文字颜色 */
+            padding: 8px 12px; /* 内边距 */
+            border-radius: 5px; /* 圆角 */
+        }
+
+            /* 鼠标悬停或聚焦时的链接样式 */
+            .pagination > li > a:hover,
+            .pagination > li > a:focus {
+                color: yellow; /* 悬停时文字颜色 */
+            }
+
+    /* 激活状态的页码样式 */
+    .pagination > .active > a,
+    .pagination > .active > span {
+        background-color: #E4BD18; /* 当前页背景色 */
+    }
+
+    /* 禁用状态的页码样式 */
+    .pagination > .disabled > span,
+    .pagination > .disabled > span:hover,
+    .pagination > .disabled > span:focus,
+    .pagination > .disabled > a,
+    .pagination > .disabled > a:hover,
+    .pagination > .disabled > a:focus {
+        border-color: #ddd; /* 禁用时的边框颜色 */
+        cursor: not-allowed; /* 禁用时的鼠标样式 */
+    }
+
+    /* 分页控件中的 "上一页" 和 "下一页" 链接样式 */
+    .pagination > .prev a,
+    .pagination > .next a {
+        background-color: #CCCCCC; /* 上一页和下一页的背景色 */
+    }
+
+    /* 确保分页控件左右两边没有多余的空间 */
+    .pagination > li:first-child > a,
+    .pagination > li:first-child > span {
+        border-bottom-left-radius: 4px;
+        border-top-left-radius: 4px;
+    }
+
+    .pagination > li:last-child > a,
+    .pagination > li:last-child > span {
+        border-bottom-right-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+    /* "下一页"链接的样式 */
+    .pagination > .next a {
+        background-color: #CCCCCC; /* 你希望的背景色 */
+        color: #333; /* 你希望的文字颜色 */
+        /* 其他样式规则 */
+    }
